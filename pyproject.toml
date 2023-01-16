@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "python-sql-tutorial"
+name = "python_sql_tutorial"
 version = "0.1.0"
 description = "Tutorial for working with RDB in Python Projects"
 authors = ["Ilia Nikolaenko <niil02@sms-group.com>"]
