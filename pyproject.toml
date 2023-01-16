@@ -6,6 +6,7 @@ authors = ["Ilia Nikolaenko <niil02@sms-group.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+
 # Databases
 SQLAlchemy = "^1.4.42"
 pyodbc = "^4.0.32"
