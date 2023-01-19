@@ -24,7 +24,7 @@ update1_stmt = text("UPDATE Cracs_preventer_test.signal_meta SET update_date=:up
 # # make sure it’s closed when operations are completed
 # # See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#tutorial-executing-orm-session
 # with Session(engine_SQLServerTest_MainDB) as session:
-#     result = session.execute(select1_stmt)  # Session.execute() is used the same way as Connection.execute() 
+#     result = session.execute(select1_stmt)  # Session.execute() is used the same way as Connection.execute()
 #     for row in result:
 #         print(f"id{counter}:", row["id"], f" has a category", row["category"], "with name:", row["name"])
 #         counter += 1
@@ -32,17 +32,17 @@ update1_stmt = text("UPDATE Cracs_preventer_test.signal_meta SET update_date=:up
 # See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#tutorial-executing-orm-session
 with Session(engine_SQLServerTest_MainDB) as session:
     result1 = session.execute(update1_stmt, {"upd_date": "2023-19-01 00:00:00.000", "descr": "This is a test object", "id": "test_obj_1"})
-    session.commit()
 
     result2 = session.execute(select3_stmt, {"id": "test_obj_1"})
     for row in result2:
         print(row["id"], row["name"], "last updated on:", row["update_date"], "with description:", row["description"])
 
     result3 = session.execute(update1_stmt, {"upd_date": datetime.utcnow(), "descr": "New test description 1", "id": "test_obj_1"})
-    session.commit()
 
     result4 = session.execute(select3_stmt, {"id": "test_obj_1"})
     for row in result4:
         print(row["id"], row["name"], "last updated on:", row["update_date"], "with description:", row["description"])
+
+    session.commit()
 
 
