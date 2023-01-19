@@ -11,9 +11,6 @@ Base = declarative_base()
 
 # See https://docs.sqlalchemy.org/en/14/dialects/mssql.html#dialect-mssql-pyodbc-connect
 url_SQLServerTestDBMS = f"{dbdriver}://{username}:{password}@{dbpath}/"
-
-print(url_SQLServerTestDBMS)
-print(SQLServerTestDBs.MASTER_DB)
 print(url_SQLServerTestDBMS + f"{SQLServerTestDBs.MASTER_DB.value}?driver=ODBC+Driver+17+for+SQL+Server")
 
 # Hostname connection. See https://docs.sqlalchemy.org/en/14/dialects/mssql.html#module-sqlalchemy.dialects.mssql.pyodbc
