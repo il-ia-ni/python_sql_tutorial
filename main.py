@@ -22,12 +22,14 @@ update1_stmt = text("UPDATE Cracs_preventer_test.signal_meta SET update_date=:up
 # # It’s recommended that the fundamental transactional / database interactive ORM object "Session" is used in
 # # context manager style using the Python "with:" statement. It represents active database resources, and it’s good to
 # # make sure it’s closed when operations are completed
+# # See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#tutorial-executing-orm-session
 # with Session(engine_SQLServerTest_MainDB) as session:
-#     result = session.execute(select1_stmt)
+#     result = session.execute(select1_stmt)  # Session.execute() is used the same way as Connection.execute() 
 #     for row in result:
 #         print(f"id{counter}:", row["id"], f" has a category", row["category"], "with name:", row["name"])
 #         counter += 1
 
+# See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#tutorial-executing-orm-session
 with Session(engine_SQLServerTest_MainDB) as session:
     result1 = session.execute(update1_stmt, {"upd_date": "2023-19-01 00:00:00.000", "descr": "This is a test object", "id": "test_obj_1"})
     session.commit()
