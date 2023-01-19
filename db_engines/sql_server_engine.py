@@ -27,9 +27,9 @@ engine_SQLServerTest_MainDB = create_engine(
 #     password="ilzen92!",
 #     host="localhost/SQLEXPRESSTEST",
 #     port=1433,
-#     database="master/Cracs_preventer_test",
+#     database="master",
 #     query={
-#         "driver": "ODBC Driver 19 for SQL Server",
+#         "driver": "ODBC Driver 17 for SQL Server",
 #         "TrustServerCertificate": "yes"
 #     },
 # )

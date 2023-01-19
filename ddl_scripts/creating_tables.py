@@ -4,7 +4,7 @@ from sqlalchemy.orm import declarative_base, relationship
 from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
 
 Base = declarative_base()
-# Base.metadata.create_all(engine_SQLServerTest_MainDB)  # Adds all ORM table classes to the specified SB by emitting
+# Base.metadata.create_all(engine_SQLServerTest_MainDB)  # Adds all ORM table classes to the specified DB by emitting
 # CREATE TABLE DDL
 
 
