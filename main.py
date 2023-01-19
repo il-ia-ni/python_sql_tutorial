@@ -1,9 +1,10 @@
 from datetime import datetime
 
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, select
 from sqlalchemy.orm import Session
 
 from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
+from ddl_scripts.creating_tables import SignalMeta
 
 select1_stmt = text("SELECT id, category, name FROM Cracs_preventer_test.signal_meta ORDER BY id, category")
 select2_stmt = text("SELECT id, category, name FROM Cracs_preventer_test.signal_meta WHERE id > :id ORDER BY id, category")
@@ -43,6 +44,13 @@ with Session(engine_SQLServerTest_MainDB) as session:
     for row in result4:
         print(row["id"], row["name"], "last updated on:", row["update_date"], "with description:", row["description"])
 
-    session.commit()
+    session.commit()  # "commit-as-you-go" approach vs "begin once". See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#committing-changes
 
+
+with Session(engine_SQLServerTest_MainDB) as session2:
+    local_select_stmt = select(SignalMeta).where(SignalMeta.id.in_(["test_obj_1", "test_obj_2"]))
+
+    print("Scalar select output:", session2.scalar(local_select_stmt))
+    # for signal in session2.scalar(select_stmt):
+    #     print("Scalar select output:", signal)
 
