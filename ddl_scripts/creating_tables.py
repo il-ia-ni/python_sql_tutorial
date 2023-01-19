@@ -1,14 +1,19 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float
 from sqlalchemy.orm import declarative_base, relationship
 
+from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
+
 Base = declarative_base()
+# Base.metadata.create_all(engine_SQLServerTest_MainDB)  # Adds all ORM table classes to the specified SB by emitting
+# CREATE TABLE DDL
 
 
 class SignalMeta(Base):  # ORM class
     # __table_name__ + Column-props form a SQLAlchemy table metadata with Declarative Table configuration using both
     # Core and ORM approaches See @ https://docs.sqlalchemy.org/en/14/glossary.html#term-table-metadata
     # and https://docs.sqlalchemy.org/en/14/orm/declarative_tables.html#orm-declarative-table
-    __tablename__ = "signal_meta"
+    __tablename__ = "signal_meta"  # Must correspond to Table name in the DB!
+    __table_args__ = {"schema": "Cracs_preventer_test"}  # Found @ https://stackoverflow.com/questions/47077649/how-do-i-set-the-schema-in-sqlalchemy-for-mssql
 
     id = Column(String(128), primary_key=True, nullable=False)
     create_date = Column(DateTime, nullable=False)
