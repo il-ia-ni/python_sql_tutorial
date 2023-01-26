@@ -6,6 +6,9 @@ from sqlalchemy.orm import Session
 from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
 from ddl_scripts.creating_tables import SignalMeta
 
+# Selecting Rows with Core API or ORM API: https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#tutorial-selecting-data
+# See more to SQLAlchemy Core, ORM APIs @ https://docs.sqlalchemy.org/en/14/tutorial/index.html
+
 select1_stmt = text("SELECT id, category, name FROM Cracs_preventer_test.signal_meta ORDER BY id, category")
 select2_stmt = text("SELECT id, category, name FROM Cracs_preventer_test.signal_meta WHERE id > :id ORDER BY id, category")
 select3_stmt = text("SELECT id, name, description, update_date FROM Cracs_preventer_test.signal_meta WHERE id = :id ORDER BY id")
