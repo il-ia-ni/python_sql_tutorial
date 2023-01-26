@@ -6,7 +6,7 @@ from db_engines.db_sources_data.sql_server_test_localhost import dbdriver, dbpat
 
 Base = declarative_base()
 # For establishing connections see https://docs.sqlalchemy.org/en/14/tutorial/engine.html#tutorial-engine
-# For configuring the engine see https://docs.sqlalchemy.org/en/14/core/engines.html
+# For configuring the engine see https://docs.sqlalchemy.org/en/14/core/engines.html#microsoft-sql-server
 # For working with engines see https://docs.sqlalchemy.org/en/14/core/connections.html
 
 # See https://docs.sqlalchemy.org/en/14/dialects/mssql.html#dialect-mssql-pyodbc-connect
@@ -19,8 +19,13 @@ engine_SQLServerTest_MainDB = create_engine(
     url_SQLServerTestDBMS +
     f"{SQLServerTestDBs.MASTER_DB.value}?driver=ODBC+Driver+17+for+SQL+Server",
     # TODO: Where to store hostname DB-drivers?
-    echo=True, future=True)
+    # Following args concern DB logging: https://docs.sqlalchemy.org/en/14/core/engines.html#configuring-logging,
+    echo=True,  # https://docs.sqlalchemy.org/en/14/core/engines.html#sqlalchemy.create_engine.params.echo
+    echo_pool=True,  # https://docs.sqlalchemy.org/en/14/core/engines.html#sqlalchemy.create_engine.params.echo_pool
+    logging_name="SQL Server localhost engine",
+    future=True)
 
+# In cse of complicated passwords etc. it is https://docs.sqlalchemy.org/en/14/core/engines.html#creating-urls-programmatically
 # connection_url_SQLServer_obj = URL.create(
 #     "mssql+pyodbc",
 #     username="SA",

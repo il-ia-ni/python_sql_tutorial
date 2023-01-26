@@ -32,6 +32,17 @@ update1_stmt = text("UPDATE Cracs_preventer_test.signal_meta SET update_date=:up
 
 # See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#tutorial-executing-orm-session
 with Session(engine_SQLServerTest_MainDB) as session:
+    ''' "Release" ans connection pools
+    When the Connection is closed at the end of the with: block, the referenced DBAPI connection is released to the 
+    connection pool. From the perspective of the database itself, the connection pool will not actually “close” the 
+    connection assuming the pool has room to store this connection for the next use. When the connection is returned 
+    to the pool for re-use, the pooling mechanism issues a rollback() call on the DBAPI connection so that any 
+    transactional state or locks are removed, and the connection is ready for its next use.
+    See: https://docs.sqlalchemy.org/en/14/glossary.html#term-released
+    A connection pool is a standard technique used to maintain long running connections in memory for efficient re-use, 
+    as well as to provide management for the total number of connections an application might use simultaneously.
+    https://docs.sqlalchemy.org/en/14/core/pooling.html
+    '''
     result1 = session.execute(update1_stmt, {"upd_date": "2023-19-01 00:00:00.000", "descr": "This is a test object", "id": "test_obj_1"})
 
     result2 = session.execute(select3_stmt, {"id": "test_obj_1"})
