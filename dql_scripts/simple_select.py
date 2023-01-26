@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import create_engine, text, select
+from sqlalchemy import text, select
 from sqlalchemy.orm import Session
 
 from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
@@ -20,15 +20,16 @@ See more to SQLAlchemy Core, ORM APIs @ https://docs.sqlalchemy.org/en/14/tutori
 def select_core_signalmeta_all():
     # It’s recommended that the object "Connection" is used in context manager style using the Python "with:" statement.
     # It represents active database resources and it’s good to make sure it’s closed when operations are completed
+    counter = 1
     with engine_SQLServerTest_MainDB.connect() as connection:
         result = connection.execute(select1_stmt)
-        counter = 1
         for row in result:
             print(f"id{counter}:", row["id"], f" has a category", row["category"], "with name:", row["name"])
             counter += 1
 
 
 """ Session.execute() in ORM API 
+https://docs.sqlalchemy.org/en/14/orm/queryguide.html
 Selecting Rows with Core API or ORM API: https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#tutorial-selecting-data
 See more to SQLAlchemy Core, ORM APIs @ https://docs.sqlalchemy.org/en/14/tutorial/index.html 
 """
