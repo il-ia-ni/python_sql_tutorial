@@ -69,3 +69,32 @@ class SignalMeta(Base):  # ORM class
     def __repr__(self):
         # method is not required but is useful for debugging
         return f"SignalID (id={self.id!r} of category {self.category} with name: {self.name!r})"
+
+
+class DefectEvent(Base):
+    __tablename__ = "defect_event"
+    __table_args__ = {"schema": "Cracs_preventer_test"}
+
+    create_date = Column(DateTime, nullable=False)
+    update_date = Column(DateTime, nullable=False)
+    id = Column(Integer, primary_key=True, nullable=False)
+    created_at = Column(DateTime, nullable=False)
+    pdw_product_id = Column(Integer, nullable=True)
+    caster_id = Column(String(256), nullable=False)
+    heat_id = Column(String(128), nullable=True)
+    slab_id = Column(String(128), nullable=True)
+    model_name = Column(String(128), nullable=False)
+    model_number = Column(Integer, nullable=False)
+    data_start_time = Column(DateTime, nullable=True)
+    data_end_time = Column(DateTime, nullable=True)
+    cast_length_start = Column(Float, nullable=True)
+    cast_length_end = Column(Float, nullable=True)
+    grade_id = Column(String(128), nullable=True)
+    event_type = Column(String(10), nullable=False)
+    model_type = Column(String(10), nullable=False)
+    strand_id = Column(String(128), nullable=False)
+
+    def __repr__(self):
+        # method is not required but is useful for debugging
+        return f"EventID (id={self.id!r} of event type {self.event_type} of model: {self.model_name!r})"
+
