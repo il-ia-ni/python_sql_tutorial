@@ -23,8 +23,10 @@ def select_core_signalmeta_all():
     counter = 1
     with engine_SQLServerTest_MainDB.connect() as connection:
         result = connection.execute(select1_stmt)
-        for row in result:
-            print(f"id{counter}:", row["id"], f" has a category", row["category"], "with name:", row["name"])
+        for coreRowObj in result:  # Returns Row objs which are as close to Python tuples as possible
+            print(f"id{counter}:", coreRowObj["id"],
+                  f" has a category", coreRowObj["category"],
+                  "with name:", coreRowObj["name"])
             counter += 1
 
 
@@ -37,14 +39,16 @@ See more to SQLAlchemy Core, ORM APIs @ https://docs.sqlalchemy.org/en/14/tutori
 
 def select_orm_signalmeta_all():
     # It’s recommended that the fundamental transactional / database interactive ORM object "Session" is used in
-    # context manager style using the Python "with:" statement. It represents active database resources, and it’s good to
-    # make sure it’s closed when operations are completed
+    # context manager style using the Python "with:" statement. It represents active database resources, and it’s good
+    # to make sure it’s closed when operations are completed using the with statement
     # See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#tutorial-executing-orm-session
     counter = 1
     with Session(engine_SQLServerTest_MainDB) as session:
-        result = session.execute(select1_stmt)  # Session.execute() is used the same way as Connection.execute()
-        for row in result:
-            print(f"id{counter}:", row["id"], f" has a category", row["category"], "with name:", row["name"])
+        result = session.execute(select1_stmt)  # Session.execute() is used the same way as Connection.execute(). Using
+        # this approach, we continue to get Row objects from the result, however these rows are now capable of including
+        # complete entities, such as instances of the SignalMeta(Base) class, as individual elements within each row
+        for ormRowObj in result:
+            print(ormRowObj)
             counter += 1
 
 
