@@ -37,8 +37,9 @@ signal_meta = Table(
 )
 
 """
-Defining Table Metadata with the ORM API
+Defining Table Metadata with the ORM API (mostly with declarative mapping using sqlalchemy.orm.declarative_base)
 See @ https://docs.sqlalchemy.org/en/14/tutorial/metadata.html#tutorial-orm-table-metadata
+Declarative Mapping: https://docs.sqlalchemy.org/en/14/orm/mapping_styles.html#orm-declarative-mapping
 """
 
 
@@ -111,7 +112,7 @@ class DefectRootCause(Base):
     data_start_time = Column(DateTime, nullable=True)
     data_end_time = Column(DateTime, nullable=True)
 
-    def __repr__(self): 
+    def __repr__(self):
         # method is not required but is useful for debugging
         return f"DefectRootCause with EventId: {self.event_id!r} and SignalID: {self.signal_id!r}"
 
