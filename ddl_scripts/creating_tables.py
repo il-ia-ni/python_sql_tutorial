@@ -82,7 +82,7 @@ class DefectEvent(Base):
 
     create_date = Column(DateTime, nullable=False)
     update_date = Column(DateTime, nullable=False)
-    id = Column(Integer, primary_key=True, nullable=False)
+    event_id = Column(Integer, primary_key=True, nullable=False)
     created_at = Column(DateTime, nullable=False)
     pdw_product_id = Column(Integer, nullable=True)
     caster_id = Column(String(256), nullable=False)
@@ -94,10 +94,12 @@ class DefectEvent(Base):
     data_end_time = Column(DateTime, nullable=True)
     cast_length_start = Column(Float, nullable=True)
     cast_length_end = Column(Float, nullable=True)
+    behaviour_pattern_id = Column(String(14), nullable=True)
+    detection_probability = Column(Float, nullable=True)
     grade_id = Column(String(128), nullable=True)
     event_type = Column(String(10), nullable=False)
     model_type = Column(String(10), nullable=False)
-    strand_id = Column(String(128), nullable=False)
+    strand_id = Column(String(256), nullable=False)
 
     def __repr__(self):
         # method is not required but is useful for debugging
@@ -110,8 +112,8 @@ class DefectRootCause(Base):
 
     create_date = Column(DateTime, nullable=False)
     update_date = Column(DateTime, nullable=False)
-    event_id = Column(Integer, ForeignKey("defect_event.id"), primary_key=True, nullable=False)
-    signal_id = Column(Integer, ForeignKey("signal_meta.id"), primary_key=True, nullable=False)
+    event_id = Column(Integer, ForeignKey("Cracs_preventer_test.defect_event.event_id"), primary_key=True, nullable=False)
+    signal_id = Column(Integer, ForeignKey("Cracs_preventer_test.signal_meta.id"), primary_key=True, nullable=False)
     importance = Column(Float, nullable=True)
     data_start_time = Column(DateTime, nullable=True)
     data_end_time = Column(DateTime, nullable=True)
