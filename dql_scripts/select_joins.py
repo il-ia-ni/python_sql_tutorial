@@ -4,9 +4,9 @@ from sqlalchemy.orm import Session, sessionmaker
 from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
 from ddl_scripts.creating_tables import signal_meta, SignalMeta, DefectEvent, DefectRootCause
 
-SessionTestSQLServer = sessionmaker(bind=engine_SQLServerTest_MainDB)  # Doesn't work yet
+SessionTestSQLServer = sessionmaker(bind=engine_SQLServerTest_MainDB)  # TODO: Is this supposed to be stored centrally?
 session2 = SessionTestSQLServer.begin()
-session = Session(engine_SQLServerTest_MainDB)
+session1 = Session(engine_SQLServerTest_MainDB)
 
 select_join_orm_stmt1 = (
     # JOIN with left and right explicit sides + automatic ON-clause
@@ -37,7 +37,8 @@ select_join_orm_stmt3 = (
 
 
 def get_select_join_orm_result(select_stmt):
-    result = session.scalars(select_stmt).all()
-    for ormObj in result:
-        print(ormObj)
+    with SessionTestSQLServer.begin() as session3:
+        result = session3.scalars(select_stmt).all()
+        for ormObj in result:
+            print(ormObj)
 
