@@ -98,3 +98,20 @@ class DefectEvent(Base):
         # method is not required but is useful for debugging
         return f"EventID (id={self.id!r} of event type {self.event_type} of model: {self.model_name!r})"
 
+
+class DefectRootCause(Base):
+    __tablename__ = "defect_root_cause"
+    __table_args__ = {"schema": "Cracs_preventer_test"}
+
+    create_date = Column(DateTime, nullable=False)
+    update_date = Column(DateTime, nullable=False)
+    event_id = Column(Integer, ForeignKey("defect_event.id"), primary_key=True, nullable=False)
+    signal_id = Column(Integer, ForeignKey("signal_meta.id"), primary_key=True, nullable=False)
+    importance = Column(Float, nullable=True)
+    data_start_time = Column(DateTime, nullable=True)
+    data_end_time = Column(DateTime, nullable=True)
+
+    def __repr__(self): 
+        # method is not required but is useful for debugging
+        return f"DefectRootCause with EventId: {self.event_id!r} and SignalID: {self.signal_id!r}"
+
