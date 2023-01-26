@@ -43,7 +43,11 @@ Declarative Mapping: https://docs.sqlalchemy.org/en/14/orm/mapping_styles.html#o
 """
 
 
-Base = declarative_base()
+Base = declarative_base()  # callable returns a new base class from which new classes to be mapped may inherit from.
+# The base class refers to a registry object that maintains a collection of related mapped classes. declarative_base()
+# function is in fact shorthand for first creating the registry with the registry constructor, and then generating a
+# base class using the registry.generate_base()
+
 # Base.metadata.create_all(engine_SQLServerTest_MainDB)  # Adds all ORM table classes to the specified DB by emitting
 # CREATE TABLE DDL
 
