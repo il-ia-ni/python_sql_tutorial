@@ -6,9 +6,10 @@ from sqlalchemy.orm import Session
 from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
 from ddl_scripts.creating_tables import signal_meta, SignalMeta
 
-select1_core_stmt = select(signal_meta)
-select1_orm_stmt = select(SignalMeta)
-select2_stmt = text("SELECT id, category, name FROM Cracs_preventer_test.signal_meta WHERE id > :id ORDER BY id, category")
+select1_core_stmt = select(signal_meta)  # uses Core API Table instance with MetaData. See creating_tables.py
+select1_orm_stmt = select(SignalMeta)  # uses class mapped from the ORM API's Base Class. See creating_tables.py
+select2_core_stmt = select(signal_meta.c.id, signal_meta.c.category, signal_meta.c.name)
+select2_orm_stmt = text("SELECT id, category, name FROM Cracs_preventer_test.signal_meta WHERE id > :id ORDER BY id, category")
 select3_stmt = text("SELECT id, name, description, update_date FROM Cracs_preventer_test.signal_meta WHERE id = :id ORDER BY id")
 update1_stmt = text("UPDATE Cracs_preventer_test.signal_meta SET update_date=:upd_date, description=:descr WHERE id=:id")
 
@@ -31,8 +32,17 @@ def select_core_signalmeta_all():
             counter += 1
 
 
+def select_core_signalmeta_3cols():
+    counter = 1
+    with engine_SQLServerTest_MainDB.connect() as connection:
+        result = connection.execute(select2_core_stmt)
+        for coreRowObj in result:
+            print(coreRowObj)
+            counter += 1
+
+
 """ Session.execute() in ORM API 
-https://docs.sqlalchemy.org/en/14/orm/queryguide.html
+https://docs.sqlalchemy.org/en/14/orm/queryguide.html and https://docs.sqlalchemy.org/en/14/orm/quickstart.html#simple-select
 Selecting Rows with Core API or ORM API: https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#tutorial-selecting-data
 See more to SQLAlchemy Core, ORM APIs @ https://docs.sqlalchemy.org/en/14/tutorial/index.html 
 """

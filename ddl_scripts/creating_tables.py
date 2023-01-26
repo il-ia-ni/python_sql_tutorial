@@ -4,20 +4,20 @@ from sqlalchemy.orm import declarative_base, relationship
 from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
 
 """
-While the SQL looks the same whether we invoke select(signal_meta) or select(SignalMeta(Base)), in the more general 
-case they do not necessarily render the same thing, as an ORM-mapped class may be mapped to other kinds of “selectables”
-besides tables. The select() that’s against an ORM entity also indicates that ORM-mapped instances should be returned 
-in a result, which is not the case when SELECTing from a Table object.
+While the SQL looks the same whether we invoke select(signal_meta) or select(SignalMeta(Base)) (See select1_stmts in 
+simple_select.py), in the more general case they do not necessarily render the same thing, as an ORM-mapped class may be
+ mapped to other kinds of “selectables” besides tables. The select() that’s against an ORM entity also indicates that 
+ ORM-mapped instances should be returned in a result, which is not the case when SELECTing from a Table object.
 """
 
 """
-Describing Databases with MetaData and Table objs
+Describing Databases with CORE API's MetaData and Table objs
 See @ https://docs.sqlalchemy.org/en/14/core/metadata.html
 Table objs can also be created using table reflection from the DB itself: https://docs.sqlalchemy.org/en/14/tutorial/metadata.html#table-reflection
 """
 
 
-metadata_obj = MetaData()
+metadata_obj = MetaData()  # https://docs.sqlalchemy.org/en/14/core/metadata.html#sqlalchemy.schema.MetaData
 signal_meta = Table(
     # https://docs.sqlalchemy.org/en/14/core/metadata.html#sqlalchemy.schema.Table
     "signal_meta",
