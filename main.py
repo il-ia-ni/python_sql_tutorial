@@ -11,4 +11,5 @@ import dql_scripts.select_joins as joined_selects
 
 joined_selects.get_select_join_orm_result(joined_selects.select_join_orm_stmt1)  # Join with select.join_from()
 joined_selects.get_select_join_orm_result(joined_selects.select_join_orm_stmt2)  # Join with select.join()
+joined_selects.get_select_join_orm_result(joined_selects.select_join_orm_stmt3)  # Join with join() and explicit ON
 
