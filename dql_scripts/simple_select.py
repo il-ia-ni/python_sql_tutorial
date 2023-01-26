@@ -6,7 +6,8 @@ from sqlalchemy.orm import Session
 from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
 from ddl_scripts.creating_tables import SignalMeta
 
-select1_stmt = text("SELECT id, category, name FROM Cracs_preventer_test.signal_meta ORDER BY id, category")
+select1_core_stmt = text("SELECT id, category, name FROM Cracs_preventer_test.signal_meta ORDER BY id, category")
+select1_orm_stmt = select(SignalMeta)
 select2_stmt = text("SELECT id, category, name FROM Cracs_preventer_test.signal_meta WHERE id > :id ORDER BY id, category")
 select3_stmt = text("SELECT id, name, description, update_date FROM Cracs_preventer_test.signal_meta WHERE id = :id ORDER BY id")
 update1_stmt = text("UPDATE Cracs_preventer_test.signal_meta SET update_date=:upd_date, description=:descr WHERE id=:id")
@@ -22,7 +23,7 @@ def select_core_signalmeta_all():
     # It represents active database resources and it’s good to make sure it’s closed when operations are completed
     counter = 1
     with engine_SQLServerTest_MainDB.connect() as connection:
-        result = connection.execute(select1_stmt)
+        result = connection.execute(select1_core_stmt)
         for coreRowObj in result:  # Returns Row objs which are as close to Python tuples as possible
             print(f"id{counter}:", coreRowObj["id"],
                   f" has a category", coreRowObj["category"],
@@ -44,9 +45,9 @@ def select_orm_signalmeta_all():
     # See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#tutorial-executing-orm-session
     counter = 1
     with Session(engine_SQLServerTest_MainDB) as session:
-        result = session.execute(select1_stmt)  # Session.execute() is used the same way as Connection.execute(). Using
-        # this approach, we continue to get Row objects from the result, however these rows are now capable of including
-        # complete entities, such as instances of the SignalMeta(Base) class, as individual elements within each row
+        result = session.execute(select1_orm_stmt)  # Session.execute() is used the same way as Connection.execute().
+        # Using this approach, we continue to get Row objects from the result, however these rows are now capable of
+        # including complete entities, such as instances of the SignalMeta class as individual elements within each row
         for ormRowObj in result:
             print(ormRowObj)
             counter += 1
