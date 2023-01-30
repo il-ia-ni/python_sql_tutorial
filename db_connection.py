@@ -2,7 +2,6 @@
 Defines SQLAlchemy database connectors.
 """
 from typing import Optional
-from loguru import logger
 from sqlalchemy.engine import URL, Engine, create_engine, make_url
 from sqlalchemy.orm import Session, sessionmaker
 
