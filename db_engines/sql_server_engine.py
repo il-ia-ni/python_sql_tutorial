@@ -2,6 +2,8 @@ from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
 
+from loguru import logger
+
 from db_engines.db_sources_data.sql_server_test_localhost import dbdriver, dbpath, username, password, SQLServerTestDBs
 
 Base = declarative_base()
@@ -11,7 +13,8 @@ Base = declarative_base()
 
 # See https://docs.sqlalchemy.org/en/14/dialects/mssql.html#dialect-mssql-pyodbc-connect
 url_SQLServerTestDBMS = f"{dbdriver}://{username}:{password}@{dbpath}/"
-print(url_SQLServerTestDBMS + f"{SQLServerTestDBs.MASTER_DB.value}?driver=ODBC+Driver+17+for+SQL+Server")
+test_mssg = url_SQLServerTestDBMS + f"{SQLServerTestDBs.MASTER_DB.value}?driver=ODBC+Driver+17+for+SQL+Server"
+logger.info(f"sql_server_engine script uses url: {test_mssg}")
 
 # Hostname connection. See https://docs.sqlalchemy.org/en/14/dialects/mssql.html#module-sqlalchemy.dialects.mssql.pyodbc
 engine_SQLServerTest_MainDB = create_engine(
@@ -19,7 +22,7 @@ engine_SQLServerTest_MainDB = create_engine(
     url_SQLServerTestDBMS +
     f"{SQLServerTestDBs.MASTER_DB.value}?driver=ODBC+Driver+17+for+SQL+Server",
     # TODO: Where to store hostname DB-drivers?
-    # Following args concern DB logging: https://docs.sqlalchemy.org/en/14/core/engines.html#configuring-logging,
+    # Following args concern DB loguru_logging: https://docs.sqlalchemy.org/en/14/core/engines.html#configuring-logging,
     echo=True,  # https://docs.sqlalchemy.org/en/14/core/engines.html#sqlalchemy.create_engine.params.echo
     echo_pool=True,  # https://docs.sqlalchemy.org/en/14/core/engines.html#sqlalchemy.create_engine.params.echo_pool
     logging_name="SQL Server localhost engine",
