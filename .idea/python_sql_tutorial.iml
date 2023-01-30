@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/dql_scripts" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/_logs" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.9 (python_sql_tutorial)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
