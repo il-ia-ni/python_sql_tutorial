@@ -9,16 +9,16 @@ import dql_scripts.select_joins as joined_selects
 
 debug_format()
 url = build_full_url(url_SQLServerTestDBMS + SQLServerTestDBs.MASTER_DB.value + "?driver=ODBC+Driver+17+for+SQL+Server")
-engine = make_engine(url, 1000)
-global_session = get_session(engine)
+global_engine = make_engine(url, 1000)
+global_session = get_session(global_engine)
 
-#simple_select.select_core_signalmeta_all()  # Selection from the table using Core API
-#simple_select.select_orm_signalmeta_all()  # Selection from the table using ORM API
+# simple_select.select_core_signalmeta_all(global_engine)  # Selection from the table using Core API
+# simple_select.select_orm_signalmeta_all(global_session)  # Selection from the table using ORM API
 
-# simple_select.select_core_signalmeta_3cols()  # selects 3 cols from a Core API Table obj
+# simple_select.select_core_signalmeta_3cols(global_engine)  # selects 3 cols from a Core API Table obj
 
-#simple_select.select_orm_signalmeta_testobjs()  # Returns a _engine.Result obj with Row objs
-#simple_select.select_orm_signalmeta_testobjs_scalar_result()  # Returns selection result as a Scalar obj
+# simple_select.select_orm_signalmeta_testobjs(global_session)  # Returns a _engine.Result obj with Row objs
+# simple_select.select_orm_signalmeta_testobjs_scalar_result(global_session)  # Returns selection result as a Scalar obj
 
 #joined_selects.get_select_join_orm_result(joined_selects.select_join_orm_stmt1)  # Join with select.join_from()
 #joined_selects.get_select_join_orm_result(joined_selects.select_join_orm_stmt2)  # Join with select.join()
