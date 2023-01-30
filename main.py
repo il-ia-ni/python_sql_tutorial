@@ -4,11 +4,13 @@ from db_engines.db_sources_data.sql_server_test_localhost import dbdriver, dbpat
 
 from loguru import logger
 from loguru_logging.debug_formatter import debug_format
+from loguru_logging.trace_handler import trace_format
 
 import dql_scripts.simple_select as smpl_sel
 import dql_scripts.select_joins as jnt_sel
 
 debug_format()
+# trace_format()
 url = build_full_url(url_SQLServerTestDBMS + SQLServerTestDBs.MASTER_DB.value + "?driver=ODBC+Driver+17+for+SQL+Server")
 global_engine = make_engine(url, 1000)
 global_session = get_session(global_engine)
