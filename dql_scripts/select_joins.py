@@ -42,8 +42,7 @@ select_join_orm_stmt3 = (
 
 def get_select_join_orm_result(session: sqlalchemy.orm.session, select_stmt):
     with SessionTestSQLServer.begin() as session3:
-        # logger.trace(f"Using following select-statement: {select_stmt}")
-        logger.trace(f"Using following select-statement: {select_stmt}")
+        logger.info(f"Choosing joined data with following select-statement: {select_stmt}")
 
         result = session3.scalars(select_stmt).all()  # TODO: Also make with .execute for using with pandas
         for ormObj in result:
