@@ -15,7 +15,7 @@ def add_new_objs(session: Session, orm_obj: Base):
         # context manager style using the Python "with:" statement. The Session object represents active database resources,
         # and it’s good to make sure it’s closed when operations are completed
         session.add_all([orm_obj])
-        #logger.debug(f"Successfully added the following object: {orm_obj}")
+        logger.info(f"Successfully added the following object: {orm_obj}")
         session.commit()
 
 
