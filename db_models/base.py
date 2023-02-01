@@ -3,8 +3,8 @@ Defines DB MetaData and Base model class
 """
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime, MetaData
-from sqlalchemy.ext.declarative import as_declarative
+from sqlalchemy import Column, DateTime
+from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
