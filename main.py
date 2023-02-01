@@ -8,6 +8,8 @@ from loguru_logging.trace_handler import trace_format
 
 import dql_scripts.simple_select as smpl_sel
 import dql_scripts.select_joins as jnt_sel
+from ddl_scripts.creating_tables import SignalMeta
+from ddl_scripts.adding_data import add_new_objs, test_dataobj1, test_dataobj2
 
 debug_format()
 # trace_format()
@@ -25,5 +27,21 @@ global_session = get_session(global_engine)
 
 # jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt1)  # Join with select.join_from()
 # jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
-jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
+# jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
+""" Test adding and deleting new instances of signalMeta ORM cls"""
+add_new_objs(global_session, test_dataobj1)
+add_new_objs(global_session, test_dataobj2)
+
+test_obj1 = global_session.get(SignalMeta, "test_obj_1")
+logger.trace(f"Fetching the following test obj: {test_obj1}")  # TODO: trace severity requires a custom formatter
+
+test_obj2 = global_session.get(SignalMeta, "test_obj_2")
+logger.trace(f"Fetching the following test obj: {test_obj2}")  # TODO: trace severity requires a custom formatter
+
+global_session.delete(test_obj1)
+logger.debug(global_session.delete(test_obj1))
+global_session.delete(test_obj2)
+logger.debug(f"Deleting test obj2: {test_obj2}")
+
+global_session.commit()

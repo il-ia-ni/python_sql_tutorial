@@ -17,9 +17,8 @@ select_join_orm_stmt1 = (
     select(DefectRootCause)
     .join_from(DefectRootCause, DefectEvent)
     .join_from(DefectRootCause, SignalMeta)
-    .where(DefectRootCause.event_id == 2407113)
+    .where(DefectRootCause.event_id == 2407113)  # TODO: Upd join stmts to have no where-clauses for pandas filtering
 )
-
 
 
 select_join_orm_stmt2 = (
@@ -27,7 +26,7 @@ select_join_orm_stmt2 = (
     select(DefectRootCause)
     .join(DefectEvent)
     .join(SignalMeta)
-    .where(DefectRootCause.event_id == 2407026)
+    .where(DefectRootCause.event_id == 2407026)  # TODO: Upd join stmts to have no where-clauses for pandas filtering
 )
 
 
@@ -37,7 +36,7 @@ select_join_orm_stmt3 = (
     select(DefectRootCause)
     .join(DefectEvent, DefectRootCause.event_id == DefectEvent.event_id)
     .join(SignalMeta, DefectRootCause.signal_id == SignalMeta.id)
-    .where(DefectRootCause.event_id == 2407022)
+    .where(DefectRootCause.event_id == 2407022)  # TODO: Upd join stmts to have no where-clauses for pandas filtering
 )
 
 
@@ -46,7 +45,7 @@ def get_select_join_orm_result(session: sqlalchemy.orm.session, select_stmt):
         # logger.trace(f"Using following select-statement: {select_stmt}")
         logger.trace(f"Using following select-statement: {select_stmt}")
 
-        result = session3.scalars(select_stmt).all()
+        result = session3.scalars(select_stmt).all()  # TODO: Also make with .execute for using with pandas
         for ormObj in result:
             print(ormObj)
 
