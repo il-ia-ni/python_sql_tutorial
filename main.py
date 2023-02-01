@@ -23,24 +23,24 @@ global_session = get_session(global_engine)
 # smpl_sel.select_orm_signalmeta_testobjs(global_session)  # Returns a _engine.Result obj with Row objs
 # smpl_sel.select_orm_signalmeta_testobjs_scalar_result(global_session)  # Returns selection result as a Scalar obj
 
-# jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt1)  # Join with select.join_from()
-# jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
-# jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
+jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt1)  # Join with select.join_from()
+jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
+jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
-""" Test adding and deleting new instances of signalMeta ORM cls"""
-add_new_objs(global_session, test_dataobj1)
-add_new_objs(global_session, test_dataobj2)
-
-test_obj1 = global_session.get(SignalMeta, "test_obj_1")
-logger.info(f"Fetching the following test obj: {test_obj1}")  # TODO: trace severity requires a custom formatter
-
-test_obj2 = global_session.get(SignalMeta, "test_obj_2")
-logger.info(f"Fetching the following test obj: {test_obj2}")  # TODO: trace severity requires a custom formatter
-
-global_session.delete(test_obj1)
-logger.debug(f"Deleting test obj2: {test_obj1}")
-global_session.delete(test_obj2)
-logger.debug(f"Deleting test obj2: {test_obj2}")
-
-global_session.commit()
+# """ Test adding and deleting new instances of signalMeta ORM cls"""
+# add_new_objs(global_session, test_dataobj1)
+# add_new_objs(global_session, test_dataobj2)
+#
+# test_obj1 = global_session.get(SignalMeta, "test_obj_1")
+# logger.info(f"Fetching the following test obj: {test_obj1}")  # TODO: trace severity requires a custom formatter
+#
+# test_obj2 = global_session.get(SignalMeta, "test_obj_2")
+# logger.info(f"Fetching the following test obj: {test_obj2}")  # TODO: trace severity requires a custom formatter
+#
+# global_session.delete(test_obj1)
+# logger.debug(f"Deleting test obj2: {test_obj1}")
+# global_session.delete(test_obj2)
+# logger.debug(f"Deleting test obj2: {test_obj2}")
+#
+# global_session.commit()
 
