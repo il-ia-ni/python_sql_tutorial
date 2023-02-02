@@ -41,10 +41,19 @@ select_join_orm_stmt3 = (
 
 
 def get_select_join_orm_result(session: sqlalchemy.orm.session, select_stmt):
-    with SessionTestSQLServer.begin() as session3:
-        logger.info(f"Choosing joined data with following select-statement: {select_stmt}")
+    with session:
+        logger.debug(f"Choosing joined data with following select-statement: {select_stmt}")
 
-        result = session3.scalars(select_stmt).all()  # TODO: Also make with .execute for using with pandas
-        # for ormObj in result:
-        #     print(ormObj)  # cals the __repr__(self) method of the corresponding ORM class!
+        result = session.scalars(select_stmt).all()
+        logger.info(f"Session.execute() creates a list of instances of type: {type(result[0])}")
 
+        return result
+
+
+def get_select_join_rowslist_result(session: sqlalchemy.orm.session, select_stmt):
+    with session:
+        logger.debug(f"Choosing joined data with following select-statement: {select_stmt}")
+
+        result = session.execute(select_stmt).all()
+        logger.info(f"Session.execute() creates a list of instances of type: {type(result[0])}")
+        return result
