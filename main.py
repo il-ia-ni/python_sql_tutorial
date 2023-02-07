@@ -33,11 +33,11 @@ joins_rows = jnt_sel.get_select_join_rowslist_result(global_session, jnt_sel.sel
 # joins_scalar2 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
 # joins_scalar3 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
-scalars_df = pa.DataFrame(joins_scalar)  # This receives just a list of __repr__(self) print results of the ORM class
+scalars_df = pa.DataFrame(joins_scalar)  # This receives a list of ORM instances in form of __repr__(self) print
 logger.info("A DataFrame with following parameters was created from the scalars list: \n", scalars_df.info())
 logger.info(scalars_df.head(5))
 
-rows_df = pa.DataFrame(joins_scalar)  # This receives a list of
+rows_df = pa.DataFrame(joins_scalar)  # This receives a list of Core.Row instances
 logger.info("A DataFrame with following parameters was created from the rows list: \n", rows_df.info())
 logger.info(rows_df.head(5))
 
