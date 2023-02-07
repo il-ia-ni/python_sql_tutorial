@@ -29,7 +29,7 @@ global_session = get_session(global_engine)
 # smpl_sel.select_orm_signalmeta_testobjs_scalar_result(global_session)  # Returns selection result as a Scalar obj
 
 joins_scalar = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt1)  # Join with select.join_from()
-joins_rows = jnt_sel.get_select_join_rowslist_result(global_session, jnt_sel.select_join_orm_stmt1)  # Join with select.join_from()
+joins_rows = jnt_sel.get_select_join_rowslist_result(global_engine, jnt_sel.select_join_core_stmt1)  # Join with select.join_from()
 # joins_scalar2 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
 # joins_scalar3 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 

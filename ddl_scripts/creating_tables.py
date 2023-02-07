@@ -16,7 +16,6 @@ See @ https://docs.sqlalchemy.org/en/14/core/metadata.html
 Table objs can also be created using table reflection from the DB itself: https://docs.sqlalchemy.org/en/14/tutorial/metadata.html#table-reflection
 """
 
-
 metadata_obj = MetaData()  # https://docs.sqlalchemy.org/en/14/core/metadata.html#sqlalchemy.schema.MetaData
 signal_meta = Table(
     # https://docs.sqlalchemy.org/en/14/core/metadata.html#sqlalchemy.schema.Table
@@ -36,14 +35,55 @@ signal_meta = Table(
     schema="Cracs_preventer_test"
 )
 
+defect_event = Table(
+    "defect_event",
+    metadata_obj,
+    Column("create_date", DateTime, nullable=False),
+    Column("update_date", DateTime, nullable=False),
+    Column("event_id", Integer, primary_key=True, nullable=False),
+    Column("created_at", DateTime, nullable=False),
+    Column("pdw_product_id", Integer, nullable=True),
+    Column("caster_id", String(256), nullable=False),
+    Column("heat_id", String(128), nullable=True),
+    Column("slab_id", String(128), nullable=True),
+    Column("model_name", String(128), nullable=False),
+    Column("model_number", Integer, nullable=False),
+    Column("data_start_time", DateTime, nullable=True),
+    Column("data_end_time", DateTime, nullable=True),
+    Column("cast_length_start", Float, nullable=True),
+    Column("cast_length_end", Float, nullable=True),
+    Column("behaviour_pattern_id", String(14), nullable=True),
+    Column("detection_probability", Float, nullable=True),
+    Column("grade_id", String(128), nullable=True),
+    Column("event_type", String(10), nullable=False),
+    Column("model_type", String(10), nullable=False),
+    Column("strand_id", String(256), nullable=False),
+    schema="Cracs_preventer_test"
+)
+
+defect_root_cause = Table(
+    "defect_root_cause",
+    metadata_obj,
+    Column("create_date", DateTime, nullable=False),
+    Column("update_date", DateTime, nullable=False),
+    Column("event_id", Integer, ForeignKey("Cracs_preventer_test.defect_event.event_id"), primary_key=True,
+           nullable=False),
+    Column("signal_id", Integer, ForeignKey("Cracs_preventer_test.signal_meta.id"), primary_key=True, nullable=False),
+    Column("importance", Float, nullable=True),
+    Column("data_start_time", DateTime, nullable=True),
+    Column("data_end_time", DateTime, nullable=True),
+    schema="Cracs_preventer_test"
+)
+
 """
 Defining Table Metadata with the ORM API (mostly with declarative mapping using sqlalchemy.orm.declarative_base)
 See @ https://docs.sqlalchemy.org/en/14/tutorial/metadata.html#tutorial-orm-table-metadata
 Declarative Mapping: https://docs.sqlalchemy.org/en/14/orm/mapping_styles.html#orm-declarative-mapping
 """
 
-
 Base = declarative_base()  # callable returns a new base class from which new classes to be mapped may inherit from.
+
+
 # The base class refers to a registry object that maintains a collection of related mapped classes. declarative_base()
 # function is in fact shorthand for first creating the registry with the registry constructor, and then generating a
 # base class using the registry.generate_base()
@@ -57,7 +97,8 @@ class SignalMeta(Base):  # ORM class
     # Core and ORM approaches See @ https://docs.sqlalchemy.org/en/14/glossary.html#term-table-metadata
     # and https://docs.sqlalchemy.org/en/14/orm/declarative_tables.html#orm-declarative-table
     __tablename__ = "signal_meta"  # Must correspond to Table name in the DB!
-    __table_args__ = {"schema": "Cracs_preventer_test"}  # Found @ https://stackoverflow.com/questions/47077649/how-do-i-set-the-schema-in-sqlalchemy-for-mssql
+    __table_args__ = {
+        "schema": "Cracs_preventer_test"}  # Found @ https://stackoverflow.com/questions/47077649/how-do-i-set-the-schema-in-sqlalchemy-for-mssql
 
     id = Column(String(128), primary_key=True, nullable=False)
     create_date = Column(DateTime, nullable=False)
@@ -113,7 +154,8 @@ class DefectRootCause(Base):
 
     create_date = Column(DateTime, nullable=False)
     update_date = Column(DateTime, nullable=False)
-    event_id = Column(Integer, ForeignKey("Cracs_preventer_test.defect_event.event_id"), primary_key=True, nullable=False)
+    event_id = Column(Integer, ForeignKey("Cracs_preventer_test.defect_event.event_id"), primary_key=True,
+                      nullable=False)
     signal_id = Column(Integer, ForeignKey("Cracs_preventer_test.signal_meta.id"), primary_key=True, nullable=False)
     importance = Column(Float, nullable=True)
     data_start_time = Column(DateTime, nullable=True)
@@ -122,4 +164,3 @@ class DefectRootCause(Base):
     # def __repr__(self):
     #     # method is not required but is useful for debugging
     #     return f"DefectRootCause with EventId: {self.event_id!r} and SignalID: {self.signal_id!r}"
-

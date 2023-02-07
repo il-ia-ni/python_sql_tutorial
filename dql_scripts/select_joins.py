@@ -2,14 +2,32 @@ import sqlalchemy
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
-from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
-from ddl_scripts.creating_tables import signal_meta, SignalMeta, DefectEvent, DefectRootCause
+from ddl_scripts.creating_tables import signal_meta, defect_event, defect_root_cause, SignalMeta, DefectEvent, DefectRootCause
 
 from loguru import logger
 
-SessionTestSQLServer = sessionmaker(bind=engine_SQLServerTest_MainDB)  # TODO: Is this supposed to be stored centrally?
-session2 = SessionTestSQLServer.begin()
-session1 = Session(engine_SQLServerTest_MainDB)
+""" AREA of JOIN-Statements CORE API """
+
+
+select_join_core_stmt1 = (
+    select(defect_root_cause)
+    .join_from(defect_root_cause, signal_meta)
+    .join_from(defect_root_cause, defect_event)
+)
+
+def get_select_join_rowslist_result(engine: sqlalchemy.engine, select_stmt):
+    with engine.connect() as connection:
+        logger.debug(f"Choosing joined data with following select-statement: {select_stmt}")
+
+        result = connection.execute(select_stmt).all()  # Return all rows in a list
+        logger.info("Session.execute() creates a list of instances of type {0}. An example of the first instance:\n{1}"
+                    .format(type(result[0]), result[0])
+                    )
+        return result
+
+
+""" AREA JOIN-Statements with ORM API"""
+
 
 select_join_orm_stmt1 = (
     # JOIN with left and right explicit sides + automatic ON-clause
@@ -52,13 +70,3 @@ def get_select_join_orm_result(session: sqlalchemy.orm.session, select_stmt):
 
         return result
 
-
-def get_select_join_rowslist_result(session: sqlalchemy.orm.session, select_stmt):
-    with session:
-        logger.debug(f"Choosing joined data with following select-statement: {select_stmt}")
-
-        result = session.execute(select_stmt).all()  # Return all rows in a list
-        logger.info("Session.execute() creates a list of instances of type {0}. An example of the first instance:\n{1}"
-                    .format(type(result[0]), result[0])
-                    )
-        return result
