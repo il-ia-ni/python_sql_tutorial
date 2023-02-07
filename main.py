@@ -48,18 +48,19 @@ logger.info("Showing first 5 rows of the DF: \n{0}"
             .format(pa_query_df[:5])
             )
 logger.info("Showing 4 columns of the first {0} rows of the DF: \n{1}"
-            .format(10, pa_query_df.loc[:, ["update_date", "event_id", "signal_id", "importance"]].head(10))
+            .format(10, pa_query_df.loc[:, ["update_date", "event_id", "signal_id", "importance", "name", "model_name"]].head(10))
             )
 logger.info("Showing 4 columns of the rows {0}-{1} of the DF: \n{2}"
-            .format(2, 5, pa_query_df.loc[2:5, "update_date":"importance"])
+            .format(2, 5, pa_query_df.loc[2:5, "update_date":"model_name"])
             )
 
 logger.info("Selecting data rows with signal_id {0}: \n{1}"
-            .format(2406981, pa_query_df.loc[pa_query_df.event_id == 2406981, "update_date":"importance"])
+            .format(2406981, pa_query_df.loc[pa_query_df.event_id == 2406981, "update_date":"model_name"])
             )
 logger.info("Selecting first {0} data rows with update_date after {1}: \n{2}"
             .format(10, "2022-12-23",
-                    pa_query_df.loc[lambda df: df['update_date'] > "2022-12-23", :].head(10))
+                    pa_query_df.loc[lambda df: df['update_date'] > "2022-12-23", "update_date":"model_name"
+                    ].head(10))
             )  # selection by callable https://pandas.pydata.org/docs/user_guide/indexing.html#indexing-callable
 
 # """ Test adding and deleting new instances of signalMeta ORM cls"""

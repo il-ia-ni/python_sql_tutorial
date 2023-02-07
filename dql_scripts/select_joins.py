@@ -10,7 +10,7 @@ from loguru import logger
 
 
 select_join_core_stmt1 = (
-    select(defect_root_cause)
+    select(defect_root_cause, signal_meta.c.name, defect_event.c.model_name)
     .join_from(defect_root_cause, signal_meta)
     .join_from(defect_root_cause, defect_event)
 )
@@ -32,7 +32,7 @@ def get_select_join_rowslist_result(engine: sqlalchemy.engine, select_stmt):
 select_join_orm_stmt1 = (
     # JOIN with left and right explicit sides + automatic ON-clause
     # See https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#explicit-from-clauses-and-joins
-    select(DefectRootCause)
+    select(DefectRootCause, SignalMeta.name, DefectEvent.model_name)
     .join_from(DefectRootCause, DefectEvent)
     .join_from(DefectRootCause, SignalMeta)
     # .where(DefectRootCause.event_id == 2407113)  # TODO: Upd join stmts to have no where-clauses for pandas filtering
