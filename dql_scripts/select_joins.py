@@ -44,8 +44,11 @@ def get_select_join_orm_result(session: sqlalchemy.orm.session, select_stmt):
     with session:
         logger.debug(f"Choosing joined data with following select-statement: {select_stmt}")
 
-        result = session.scalars(select_stmt).all()
-        logger.info(f"Session.execute() creates a list of instances of type: {type(result[0])}")
+        result = session.scalars(select_stmt).all()  # Return all scalar values in a list
+        # result = session.scalars(select_stmt).fetchall()  # A synonym for the _engine.ScalarResult.all method.
+        logger.info("Session.execute() creates a list of instances of type {0}. An example of the first instance:\n{1}"
+                    .format(type(result[0]), result[0])
+                    )
 
         return result
 
@@ -54,6 +57,8 @@ def get_select_join_rowslist_result(session: sqlalchemy.orm.session, select_stmt
     with session:
         logger.debug(f"Choosing joined data with following select-statement: {select_stmt}")
 
-        result = session.execute(select_stmt).all()
-        logger.info(f"Session.execute() creates a list of instances of type: {type(result[0])}")
+        result = session.execute(select_stmt).all()  # Return all rows in a list
+        logger.info("Session.execute() creates a list of instances of type {0}. An example of the first instance:\n{1}"
+                    .format(type(result[0]), result[0])
+                    )
         return result

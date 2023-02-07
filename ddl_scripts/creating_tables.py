@@ -119,7 +119,7 @@ class DefectRootCause(Base):
     data_start_time = Column(DateTime, nullable=True)
     data_end_time = Column(DateTime, nullable=True)
 
-    def __repr__(self):
-        # method is not required but is useful for debugging
-        return f"DefectRootCause with EventId: {self.event_id!r} and SignalID: {self.signal_id!r}"
+    # def __repr__(self):
+    #     # method is not required but is useful for debugging
+    #     return f"DefectRootCause with EventId: {self.event_id!r} and SignalID: {self.signal_id!r}"
 

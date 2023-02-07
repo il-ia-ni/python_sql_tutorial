@@ -1,5 +1,6 @@
 from sqlalchemy import inspect
 
+import dql_scripts.select_joins
 from db_connection import build_full_url, make_engine, get_session
 from db_engines.sql_server_engine import url_SQLServerTestDBMS
 from db_engines.db_sources_data.sql_server_test_localhost import dbdriver, dbpath, username, password, SQLServerTestDBs
@@ -18,8 +19,6 @@ debug_format()
 url = build_full_url(url_SQLServerTestDBMS + SQLServerTestDBs.MASTER_DB.value + "?driver=ODBC+Driver+17+for+SQL+Server")
 global_engine = make_engine(url, 1000)
 global_session = get_session(global_engine)
-global_session.expire_on_commit = False  # To avoid DetachedInstanceError when loading els from a DataFrame
-# https://docs.sqlalchemy.org/en/14/errors.html#error-bhk3
 
 # smpl_sel.select_core_signalmeta_all(global_engine)  # Selection from the table using Core API
 # smpl_sel.select_orm_signalmeta_all(global_session)  # Selection from the table using ORM API
@@ -34,14 +33,34 @@ joins_rows = jnt_sel.get_select_join_rowslist_result(global_session, jnt_sel.sel
 # joins_scalar2 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
 # joins_scalar3 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
-joins_df1 = pa.DataFrame(joins_scalar)
-logger.info(f"Instances of scalar_joins list are inspected for detached-status... The result is: {inspect(joins_scalar[0]).detached}")  # State Inspection of ORM Instances is possible
-# For State Management see @ https://docs.sqlalchemy.org/en/14/orm/session_state_management.html#session-object-states
-joins_df1.info()
+scalars_df = pa.DataFrame(joins_scalar)  # This receives just a list of __repr__(self) print results of the ORM class
+logger.info("A DataFrame with following parameters was created from the scalars list: \n", scalars_df.info())
+logger.info(scalars_df.head(5))
 
-joins_df2 = pa.DataFrame(joins_rows)
-logger.info(f"Instances of rows_joins list are inspected for detached-status... The result is: {inspect(joins_rows[0]).detached}")   # State Inspection of Engine.Row Instances is not possible
-joins_df2.info()
+rows_df = pa.DataFrame(joins_scalar)  # This receives a list of
+logger.info("A DataFrame with following parameters was created from the rows list: \n", rows_df.info())
+logger.info(rows_df.head(5))
+
+pa_query_df = pa.read_sql_query(sql=dql_scripts.select_joins.select_join_orm_stmt1, con=global_engine)
+logger.info("A DataFrame with following parameters was created from the SQL query: \n", pa_query_df.info())
+
+logger.info("Showing first 5 rows of the DF: \n{0}"
+            .format(pa_query_df[:5])
+            )
+logger.info("Showing 4 columns of the first {0} rows of the DF: \n{1}"
+            .format(10, pa_query_df.loc[:, ["update_date", "event_id", "signal_id", "importance"]].head(10))
+            )
+logger.info("Showing 4 columns of the rows {0}-{1} of the DF: \n{2}"
+            .format(2, 5, pa_query_df.loc[2:5, "update_date":"importance"])
+            )
+
+logger.info("Selecting data rows with signal_id {0}: \n{1}"
+            .format(2406981, pa_query_df.loc[pa_query_df.event_id == 2406981, "update_date":"importance"])
+            )
+logger.info("Selecting first {0} data rows with update_date after {1}: \n{2}"
+            .format(10, "2022-12-23",
+                    pa_query_df.loc[lambda df: df['update_date'] > "2022-12-23", :].head(10))
+            )  # selection by callable https://pandas.pydata.org/docs/user_guide/indexing.html#indexing-callable
 
 # """ Test adding and deleting new instances of signalMeta ORM cls"""
 # add_new_objs(global_session, test_dataobj1)
