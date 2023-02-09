@@ -2,6 +2,7 @@ from sqlalchemy import Table, MetaData, Column, ForeignKey, Integer, String, Dat
 from sqlalchemy.orm import declarative_base, relationship
 
 from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
+from db_engines.sqlite_engine import engine_SQLite_TestDB
 
 """
 While the SQL looks the same whether we invoke select(signal_meta) or select(SignalMeta(Base)) (See select1_stmts in 
@@ -88,9 +89,6 @@ Base = declarative_base()  # callable returns a new base class from which new cl
 # function is in fact shorthand for first creating the registry with the registry constructor, and then generating a
 # base class using the registry.generate_base()
 
-# Base.metadata.create_all(engine_SQLServerTest_MainDB)  # Adds all ORM table classes to the specified DB by emitting
-# CREATE TABLE DDL
-
 
 class SignalMeta(Base):  # ORM class
     # __table_name__ + Column-props form a SQLAlchemy table metadata with Declarative Table configuration using both
@@ -98,7 +96,7 @@ class SignalMeta(Base):  # ORM class
     # and https://docs.sqlalchemy.org/en/14/orm/declarative_tables.html#orm-declarative-table
     __tablename__ = "signal_meta"  # Must correspond to Table name in the DB!
     __table_args__ = {
-        "schema": "Cracs_preventer_test"}  # Found @ https://stackoverflow.com/questions/47077649/how-do-i-set-the-schema-in-sqlalchemy-for-mssql
+        "schema": "main"}  # Found @ https://stackoverflow.com/questions/47077649/how-do-i-set-the-schema-in-sqlalchemy-for-mssql
 
     id = Column(String(128), primary_key=True, nullable=False)
     create_date = Column(DateTime, nullable=False)
@@ -120,7 +118,7 @@ class SignalMeta(Base):  # ORM class
 
 class DefectEvent(Base):
     __tablename__ = "defect_event"
-    __table_args__ = {"schema": "Cracs_preventer_test"}
+    __table_args__ = {"schema": "main"}
 
     create_date = Column(DateTime, nullable=False)
     update_date = Column(DateTime, nullable=False)
@@ -150,13 +148,13 @@ class DefectEvent(Base):
 
 class DefectRootCause(Base):
     __tablename__ = "defect_root_cause"
-    __table_args__ = {"schema": "Cracs_preventer_test"}
+    __table_args__ = {"schema": "main"}
 
     create_date = Column(DateTime, nullable=False)
     update_date = Column(DateTime, nullable=False)
-    event_id = Column(Integer, ForeignKey("Cracs_preventer_test.defect_event.event_id"), primary_key=True,
+    event_id = Column(Integer, ForeignKey("main.defect_event.event_id"), primary_key=True,
                       nullable=False)
-    signal_id = Column(Integer, ForeignKey("Cracs_preventer_test.signal_meta.id"), primary_key=True, nullable=False)
+    signal_id = Column(Integer, ForeignKey("main.signal_meta.id"), primary_key=True, nullable=False)
     importance = Column(Float, nullable=True)
     data_start_time = Column(DateTime, nullable=True)
     data_end_time = Column(DateTime, nullable=True)
@@ -164,3 +162,10 @@ class DefectRootCause(Base):
     # def __repr__(self):
     #     # method is not required but is useful for debugging
     #     return f"DefectRootCause with EventId: {self.event_id!r} and SignalID: {self.signal_id!r}"
+
+# SQLAlchemy 2 doesn't support engine.execute(). SQLite as backup solution for a main DB had to
+# be loaded in-memory as schema name. https://stackoverflow.com/a/44877481
+# Base.metadata.create_all(engine_SQLite_TestDB.execute("attach ':memory:' as Cracs_preventer_test"))
+
+Base.metadata.create_all(engine_SQLite_TestDB)
+
