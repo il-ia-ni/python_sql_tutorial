@@ -67,7 +67,7 @@ def select_orm_signalmeta_all(session: sqlalchemy.orm.session):
 def select_orm_signalmeta_testobjs(session: sqlalchemy.orm.session):
     # See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#tutorial-executing-orm-session
     with session:
-        """ "Release" any connection pools
+        """ "Release" ans connection pools
         When the Connection is closed at the end of the with: block, the referenced DBAPI connection is released to the 
         connection pool. From the perspective of the database itself, the connection pool will not actually “close” the 
         connection assuming the pool has room to store this connection for the next use. When the connection is returned 

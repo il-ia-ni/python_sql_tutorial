@@ -1,35 +1,17 @@
 """
     Defines defect events table.
 """
-from enum import Enum
-from itertools import groupby
-from typing import Dict, Iterable, List
-
-from cracs_common.definitions.v2.behaviour_pattern import BehaviourPattern
-from cracs_common.definitions.v2.model_type import ModelType
 from sqlalchemy import (
     BigInteger,
     Column,
     DateTime,
     Enum,
     Float,
-    ForeignKey,
     Integer,
     String,
-    case,
-    false,
-    func,
-    select,
-    true,
 )
-from sqlalchemy.orm import aliased, column_property, relationship
 
-from ...helpers.utils import StrEnum
-from ..pdw import L2Slab, SPHeat
 from .base import Base, CreateUpdateTimeMixin
-from .behavior_pattern_mapping import BehaviorPatternMapping
-from .defect_meta import DefectMeta
-from .defect_root_causes import DefectRootCause
 
 # pylint: disable=no-member
 
@@ -67,14 +49,10 @@ class DefectEvent(Base, CreateUpdateTimeMixin):
     __tablename__ = "defect_event"
     __table_args__ = {"comment": "Contains defect event data"}
 
-    # TODO: Add columns
-    #           session_id - UUID that for detections connected to one model detection session
-    #                        (just in case a slab would pass the model twice)
-
     # message identifiers
     event_id = Column(BigInteger, primary_key=True, comment="unique event id")
     event_type = Column(
-        Enum(DefectEventType),
+        String(256),
         nullable=False,
         comment="Defect event type",
     )
@@ -125,11 +103,9 @@ class DefectEvent(Base, CreateUpdateTimeMixin):
     # used model
     model_name = Column(String(128), nullable=False, comment="Name of model used for prediction")
     model_number = Column(Integer, nullable=False, comment="Version of model used for prediction")
-    model_type = Column(Enum(ModelType), nullable=False, comment="Type of the model used for prediction")
+    model_type = Column(String(256), nullable=False, comment="Type of the model used for prediction")
 
     # input data intervals
-    # TODO: data_start_time and data_end_time are marked as required in cracs-common now.
-    #  make these fields not null in the DB
     data_start_time = Column(
         DateTime(),
         comment="Start of the time interval considered by the inspection",
@@ -140,7 +116,7 @@ class DefectEvent(Base, CreateUpdateTimeMixin):
 
     # defect data
     behaviour_pattern_id = Column(
-        Enum(BehaviourPattern),
+        String(256),
         index=True,
         comment="Id of the detected behaviour pattern (e.g. 'clogging' or 'bulging')",
     )

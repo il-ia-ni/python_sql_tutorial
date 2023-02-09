@@ -1,7 +1,7 @@
 """
 Defines signals metadata table.
 """
-from sqlalchemy import Column, Enum, Float, String
+from sqlalchemy import Column, Float, String
 
 from .base import Base, CreateUpdateTimeMixin
 
