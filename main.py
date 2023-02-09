@@ -30,10 +30,12 @@ joins_rows = jnt_sel.get_select_join_rowslist_result(global_engine, jnt_sel.sele
 # joins_scalar3 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
 scalars_df = pa.DataFrame(joins_scalar)  # uses a list of Rows when selecting specific attrs / ORM instances when selecting a whole table
+scalars_df.rename_axis("ORM_DF", axis="columns")
 logger.info("A DataFrame with following parameters was created from the scalars list: \n", scalars_df.info())
 logger.info(scalars_df.head(5))
 
 rows_df = pa.DataFrame(joins_rows)  # uses a list of Row instances
+rows_df.rename_axis("CORE_DF", axis="columns")
 logger.info("A DataFrame with following parameters was created from the rows list: \n", rows_df.info())
 logger.info(rows_df.head(5))
 
@@ -45,6 +47,7 @@ pa_query_df = pa.read_sql_query(
     # parse_dates={"update_date": "%c"},
     # parse_dates={"update_date": {"utc": True, "format": "%c"}}
 )
+pa_query_df.rename_axis("SQL Query DF", axis="columns")
 logger.info("A DataFrame with following parameters was created from the SQL query: \n", pa_query_df.info())
 
 logger.info("Showing first 5 rows of the DF: \n{0}"
