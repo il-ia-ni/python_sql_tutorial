@@ -29,9 +29,13 @@ joins_rows = jnt_sel.get_select_join_rowslist_result(global_engine, jnt_sel.sele
 # joins_scalar2 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
 # joins_scalar3 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
-scalars_df = pa.DataFrame(joins_scalar)  # This receives a list of ORM instances in form of __repr__(self) print
+scalars_df = pa.DataFrame(joins_scalar)  # uses a list of Rows when selecting specific attrs / ORM instances when selecting a whole table
 logger.info("A DataFrame with following parameters was created from the scalars list: \n", scalars_df.info())
 logger.info(scalars_df.head(5))
+
+rows_df = pa.DataFrame(joins_rows)  # uses a list of Row instances
+logger.info("A DataFrame with following parameters was created from the rows list: \n", rows_df.info())
+logger.info(rows_df.head(5))
 
 pa_query_df = pa.read_sql_query(
     # See https://pandas.pydata.org/docs/reference/api/pandas.read_sql_query.html#pandas.read_sql_query
