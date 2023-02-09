@@ -1,13 +1,12 @@
-import datetime
 from typing import List
 import pandas as pd
 from enum import Enum
-from db_models.defect_root_cause import DefectRootCause
-from db_models.defect_event import DefectEvent
+from phillip.db_models.defect_root_cause import DefectRootCause
+from phillip.db_models.defect_event import DefectEvent
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from sqlalchemy.types import DateTime, String
-from db_connection import create_session_from_url
+from phillip.db_connection import create_session_from_url
 
 
 class BehaviourPattern(str, Enum):
