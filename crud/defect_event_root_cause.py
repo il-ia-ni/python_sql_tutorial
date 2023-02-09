@@ -75,8 +75,7 @@ def join_defect_event_root_cause_filter_behaviour_id(session: Session,
                                DefectRootCause.event_id == DefectEvent.event_id)\
         .filter(DefectEvent.behaviour_pattern_id.in_(defects))\
         .filter(DefectEvent.strand_id.in_(strand_ids))\
-        .filter(DefectEvent.create_date.between(start, end))\
-        .group_by(DefectEvent.event_id)
+        .filter(DefectEvent.create_date.between(start, end))
     result = session.execute(join_query).fetchall()
     column_names = join_query.columns.keys()
     data = pd.DataFrame(data=result, columns=column_names)
