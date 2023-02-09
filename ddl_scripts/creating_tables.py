@@ -73,7 +73,8 @@ class SignalMeta(Base):  # ORM class
 
     def __repr__(self):
         # method is not required but is useful for debugging
-        return f"SignalID (id={self.id!r} of category {self.category} with name: {self.name!r})"
+        return f"SignalID (id={self.id!r} of category {self.category} with name: {self.name!r}" \
+               f"\nDescription of the object: {self.description!r})"
 
 
 class DefectEvent(Base):

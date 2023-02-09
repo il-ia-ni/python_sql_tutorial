@@ -14,7 +14,7 @@ Base = declarative_base()
 # See https://docs.sqlalchemy.org/en/14/dialects/mssql.html#dialect-mssql-pyodbc-connect
 url_SQLServerTestDBMS = f"{dbdriver}://{username}:{password}@{dbpath}/"
 test_mssg = url_SQLServerTestDBMS + f"{SQLServerTestDBs.MASTER_DB.value}?driver=ODBC+Driver+17+for+SQL+Server"
-logger.info(f"sql_server_engine script uses url: {test_mssg}")
+logger.trace(f"sql_server_engine script uses url: {test_mssg}")
 
 # Hostname connection. See https://docs.sqlalchemy.org/en/14/dialects/mssql.html#module-sqlalchemy.dialects.mssql.pyodbc
 engine_SQLServerTest_MainDB = create_engine(

@@ -1,9 +1,8 @@
 from datetime import datetime
 
+import sqlalchemy
 from sqlalchemy import text, select
-from sqlalchemy.orm import Session
 
-from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
 from ddl_scripts.creating_tables import signal_meta, SignalMeta
 
 select1_core_stmt = select(signal_meta)  # uses Core API Table instance with MetaData. See creating_tables.py
@@ -19,11 +18,11 @@ See more to SQLAlchemy Core, ORM APIs @ https://docs.sqlalchemy.org/en/14/tutori
 """
 
 
-def select_core_signalmeta_all():
+def select_core_signalmeta_all(engine: sqlalchemy.engine):
     # It’s recommended that the object "Connection" is used in context manager style using the Python "with:" statement.
     # It represents active database resources and it’s good to make sure it’s closed when operations are completed
     counter = 1
-    with engine_SQLServerTest_MainDB.connect() as connection:
+    with engine.connect() as connection:
         result = connection.execute(select1_core_stmt)
         for coreRowObj in result:  # Returns Row objs which are as close to Python tuples as possible
             print(f"id{counter}:", coreRowObj["id"],
@@ -32,9 +31,9 @@ def select_core_signalmeta_all():
             counter += 1
 
 
-def select_core_signalmeta_3cols():
+def select_core_signalmeta_3cols(engine: sqlalchemy.engine):
     counter = 1
-    with engine_SQLServerTest_MainDB.connect() as connection:
+    with engine.connect() as connection:
         result = connection.execute(select2_core_stmt)
         for coreRowObj in result:
             print(coreRowObj)
@@ -48,13 +47,13 @@ See more to SQLAlchemy Core, ORM APIs @ https://docs.sqlalchemy.org/en/14/tutori
 """
 
 
-def select_orm_signalmeta_all():
+def select_orm_signalmeta_all(session: sqlalchemy.orm.session):
     # It’s recommended that the fundamental transactional / database interactive ORM object "Session" is used in
     # context manager style using the Python "with:" statement. It represents active database resources, and it’s good
     # to make sure it’s closed when operations are completed using the with statement
     # See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#tutorial-executing-orm-session
     counter = 1
-    with Session(engine_SQLServerTest_MainDB) as session:
+    with session:
         result = session.execute(select1_orm_stmt)  # Session.execute() is used the same way as Connection.execute().
         # Using this approach, we continue to get Row objects from the result, however these rows are now capable of
         # including complete entities, such as instances of the SignalMeta class as individual elements within each row
@@ -65,9 +64,9 @@ def select_orm_signalmeta_all():
 
 
 # noinspection SpellCheckingInspection
-def select_orm_signalmeta_testobjs():
+def select_orm_signalmeta_testobjs(session: sqlalchemy.orm.session):
     # See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#tutorial-executing-orm-session
-    with Session(engine_SQLServerTest_MainDB) as session:
+    with session:
         """ "Release" ans connection pools
         When the Connection is closed at the end of the with: block, the referenced DBAPI connection is released to the 
         connection pool. From the perspective of the database itself, the connection pool will not actually “close” the 
@@ -100,17 +99,17 @@ def select_orm_signalmeta_testobjs():
 
 
 # noinspection SpellCheckingInspection
-def select_orm_signalmeta_testobjs_scalar_result():
+def select_orm_signalmeta_testobjs_scalar_result(session: sqlalchemy.orm.session):
     """
     The method that is often useful when querying for ORM objects is the Session.scalars() method, which will return
     a ScalarResult filtering object (A wrapper for a Result that returns scalar values rather than Row values) which
     will return single elements rather than Row object. See https://docs.sqlalchemy.org/en/14/orm/session_api.html#sqlalchemy.orm.Session.scalars
     https://docs.sqlalchemy.org/en/14/orm/quickstart.html#simple-select
     """
-    with Session(engine_SQLServerTest_MainDB) as session2:
+    with session:
         local_select_stmt = select(SignalMeta).where(SignalMeta.id.in_(["test_obj_1", "test_obj_2"]))
 
-        print("Scalar select output:", session2.scalar(local_select_stmt))
+        print("Scalar select output:", session.scalar(local_select_stmt))
         # for signal in session2.scalar(select_stmt):
         #     print("Scalar select output:", signal)
 
