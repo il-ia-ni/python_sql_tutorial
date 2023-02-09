@@ -17,7 +17,10 @@ from ddl_scripts.creating_tables import SignalMeta
 from ddl_scripts.adding_data import add_new_objs, test_dataobj1, test_dataobj2
 
 debug_format()
-url = build_full_url(url_SQLite_TestDB)
+# Use localhost MS SQL Server
+url = build_full_url(url_SQLServerTestDBMS + f"{SQLServerTestDBs.MASTER_DB.value}?driver=ODBC+Driver+17+for+SQL+Server")
+# Use SQLite
+# url = build_full_url(url_SQLite_TestDB)
 global_engine = make_engine(url, 1000)
 global_session = get_session(global_engine)
 
