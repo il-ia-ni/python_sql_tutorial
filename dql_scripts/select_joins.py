@@ -10,7 +10,8 @@ from loguru import logger
 
 
 select_join_core_stmt1 = (
-    select(defect_root_cause, signal_meta.c.name, defect_event.c.model_name)
+    select(defect_root_cause.c.update_date, defect_root_cause.c.event_id, defect_root_cause.c.signal_id,
+           defect_root_cause.c.importance, signal_meta.c.name, defect_event.c.model_name)
     .join_from(defect_root_cause, signal_meta)  # https://docs.sqlalchemy.org/en/14/core/selectable.html#sqlalchemy.sql.expression.Select.join_from
     .join_from(defect_root_cause, defect_event)
 )
@@ -32,7 +33,8 @@ def get_select_join_rowslist_result(engine: sqlalchemy.engine, select_stmt):
 select_join_orm_stmt1 = (
     # JOIN with left and right explicit sides + automatic ON-clause
     # See https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#explicit-from-clauses-and-joins
-    select(DefectRootCause, SignalMeta.name, DefectEvent.model_name)
+    select(DefectRootCause.update_date, DefectRootCause.event_id, DefectRootCause.signal_id, DefectRootCause.importance,
+           SignalMeta.name, DefectEvent.model_name)
     .join_from(DefectRootCause, DefectEvent)  # https://docs.sqlalchemy.org/en/14/core/selectable.html#sqlalchemy.sql.expression.Select.join_from
     .join_from(DefectRootCause, SignalMeta)
     # .where(DefectRootCause.event_id == 2407113)
@@ -62,7 +64,9 @@ def get_select_join_orm_result(session: sqlalchemy.orm.session, select_stmt):
     with session:
         logger.debug(f"Choosing joined data with following select-statement: {select_stmt}")
 
-        result = session.scalars(select_stmt).all()  # Return all scalar values in a list
+        # See https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#selecting-orm-entities-and-columns
+        result = session.execute(select_stmt).all()  # Return Rows of attributes / ORM instances in a list
+        # result = session.scalars(select_stmt).all()  # Return Rows of ORM instances in a list
         # result = session.scalars(select_stmt).fetchall()  # A synonym for the _engine.ScalarResult.all method.
         logger.info("Session.execute() creates a list of instances of type {0}. An example of the first instance:\n{1}"
                     .format(type(result[0]), result[0])

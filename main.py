@@ -37,11 +37,18 @@ scalars_df = pa.DataFrame(joins_scalar)  # This receives a list of ORM instances
 logger.info("A DataFrame with following parameters was created from the scalars list: \n", scalars_df.info())
 logger.info(scalars_df.head(5))
 
-rows_df = pa.DataFrame(joins_scalar)  # This receives a list of Core.Row instances
+rows_df = pa.DataFrame(joins_rows)  # This receives a list of Core.Row instances
 logger.info("A DataFrame with following parameters was created from the rows list: \n", rows_df.info())
 logger.info(rows_df.head(5))
 
-pa_query_df = pa.read_sql_query(sql=dql_scripts.select_joins.select_join_orm_stmt1, con=global_engine)
+pa_query_df = pa.read_sql_query(
+    # See https://pandas.pydata.org/docs/reference/api/pandas.read_sql_query.html#pandas.read_sql_query
+    sql=dql_scripts.select_joins.select_join_orm_stmt1,
+    con=global_engine,
+    dtype={"signal_id": "string", "name": "string", "model_name": "string"},  # otherwise parsed as dtype 'object'
+    # parse_dates={"update_date": "%c"},
+    # parse_dates={"update_date": {"utc": True, "format": "%c"}}
+)
 logger.info("A DataFrame with following parameters was created from the SQL query: \n", pa_query_df.info())
 
 logger.info("Showing first 5 rows of the DF: \n{0}"
