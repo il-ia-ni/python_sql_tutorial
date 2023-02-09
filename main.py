@@ -3,6 +3,7 @@ from sqlalchemy import inspect
 import dql_scripts.select_joins
 from db_connection import build_full_url, make_engine, get_session
 from db_engines.sql_server_engine import url_SQLServerTestDBMS
+from db_engines.sqlite_engine import url_SQLite_TestDB
 from db_engines.db_sources_data.sql_server_test_localhost import dbdriver, dbpath, username, password, SQLServerTestDBs
 
 from loguru import logger
@@ -16,7 +17,7 @@ from ddl_scripts.creating_tables import SignalMeta
 from ddl_scripts.adding_data import add_new_objs, test_dataobj1, test_dataobj2
 
 debug_format()
-url = build_full_url(url_SQLServerTestDBMS + SQLServerTestDBs.MASTER_DB.value + "?driver=ODBC+Driver+17+for+SQL+Server")
+url = build_full_url(url_SQLite_TestDB)
 global_engine = make_engine(url, 1000)
 global_session = get_session(global_engine)
 
