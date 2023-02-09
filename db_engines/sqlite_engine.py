@@ -7,7 +7,7 @@ from db_engines.db_sources_data.sqlite_test import dbdriver, dbpath
 # For configuring the engine see https://docs.sqlalchemy.org/en/14/core/engines.html#sqlite
 # For working with engines see https://docs.sqlalchemy.org/en/14/core/connections.html
 
-url_SQLite_TestDB = f"{dbdriver}:/{dbpath}"
+url_SQLite_TestDB = f"{dbdriver}:/{dbpath}"  # TODO: always check, if the sqlite-file is available at "./sqlite_db/"
 test_mssg = url_SQLite_TestDB
 logger.debug(f"sql_server_engine script uses url: {test_mssg}")
 
