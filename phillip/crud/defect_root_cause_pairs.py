@@ -39,7 +39,7 @@ def root_cause_pairs_query(date: str, signals_to_filter: Set[str]) -> str:
     return root_cause_groups
 
 
-def extract_root_cause_pairs(session: Session, date: str, signals_to_filter: Set[str]):
+def extract_root_cause_pairs(session: Session, date: str, signals_to_filter: Set[str]) -> pd.DataFrame:
     query = root_cause_pairs_query(date=date, signals_to_filter=signals_to_filter)
     with session as sess:
         result = sess.execute(query)
