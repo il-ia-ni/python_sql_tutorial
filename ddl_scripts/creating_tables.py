@@ -33,7 +33,7 @@ signal_meta = Table(
     Column("description", String(1024), nullable=True),
     Column("y_lim_min", Float, nullable=True),
     Column("y_lim_max", Float, nullable=True),
-    schema="Cracs_preventer_test"
+    schema="main"
 )
 
 defect_event = Table(
@@ -59,7 +59,7 @@ defect_event = Table(
     Column("event_type", String(10), nullable=False),
     Column("model_type", String(10), nullable=False),
     Column("strand_id", String(256), nullable=False),
-    schema="Cracs_preventer_test"
+    schema="main"
 )
 
 defect_root_cause = Table(
@@ -67,13 +67,13 @@ defect_root_cause = Table(
     metadata_obj,
     Column("create_date", DateTime, nullable=False),
     Column("update_date", DateTime, nullable=False),
-    Column("event_id", Integer, ForeignKey("Cracs_preventer_test.defect_event.event_id"), primary_key=True,
+    Column("event_id", Integer, ForeignKey("main.defect_event.event_id"), primary_key=True,
            nullable=False),
-    Column("signal_id", Integer, ForeignKey("Cracs_preventer_test.signal_meta.id"), primary_key=True, nullable=False),
+    Column("signal_id", String(128), ForeignKey("main.signal_meta.id"), primary_key=True, nullable=False),
     Column("importance", Float, nullable=True),
     Column("data_start_time", DateTime, nullable=True),
     Column("data_end_time", DateTime, nullable=True),
-    schema="Cracs_preventer_test"
+    schema="main"
 )
 
 """
@@ -167,5 +167,5 @@ class DefectRootCause(Base):
 # be loaded in-memory as schema name. https://stackoverflow.com/a/44877481
 # Base.metadata.create_all(engine_SQLite_TestDB.execute("attach ':memory:' as Cracs_preventer_test"))
 
-Base.metadata.create_all(engine_SQLite_TestDB)
+# Base.metadata.create_all(engine_SQLite_TestDB)
 
