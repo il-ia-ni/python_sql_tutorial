@@ -11,11 +11,13 @@ from sqlalchemy.orm import Session, sessionmaker
 def build_full_url(url: str, odbc_driver: Optional[str]) -> URL:
     """Generates a new database connection string based on the application settings.
 
-    Adds "odbc_driver" param to the URL when pyodbc connector is used.
+    Adds "odbc_driver" param to the URL when pyodbc connector is used. When using a hostname connection instead of DSN,
+    the driver name must also be specified in the query parameters of the URL.
+    See https://docs.sqlalchemy.org/en/14/dialects/mssql.html#module-sqlalchemy.dialects.mssql.pyodbc
 
     Args:
         url: database connection string
-        odbc_driver: ODBC driver to use
+        odbc_driver: ODBC driver to use in case of hostname connection
     """
     db_url = make_url(url)
 
@@ -48,12 +50,14 @@ def _ensure_valid_odbc_driver(odbc_driver: Optional[str]) -> str:
     return odbc_driver
 
 
-def make_engine(db_url: URL, timeout: int) -> Engine:
+def make_engine(db_url: URL, timeout: int, verbose: bool = False) -> Engine:
     """Creates a new SQLAlchemy Engine instance
 
     Args:
         db_url: connection string to use
         timeout: connection timeout in seconds
+        verbose: if set to True, makes engine report all statements as well as a repr() of their parameter lists to the
+                default log handler
     """
     # It's recommended to disable internal pyodbc pooling. See:
     # https://docs.sqlalchemy.org/en/14/dialects/mssql.html#pyodbc-pooling-connection-close-behavior
@@ -62,7 +66,12 @@ def make_engine(db_url: URL, timeout: int) -> Engine:
 
     return create_engine(
         db_url,
-        connect_args={"timeout": timeout},
+        timeout=timeout,
+        # Following args concern DB logging: https://docs.sqlalchemy.org/en/14/core/engines.html#configuring-logging,
+        echo=True,  # https://docs.sqlalchemy.org/en/14/core/engines.html#sqlalchemy.create_engine.params.echo
+        echo_pool=True,  # https://docs.sqlalchemy.org/en/14/core/engines.html#sqlalchemy.create_engine.params.echo_pool
+        logging_name="{0} engine".format(db_url.database),
+        future=True
     )
 
 
