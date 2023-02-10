@@ -1,8 +1,6 @@
 from sqlalchemy import Table, MetaData, Column, ForeignKey, Integer, String, DateTime, Float
 from sqlalchemy.orm import declarative_base, relationship
 
-from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
-
 """
 While the SQL looks the same whether we invoke select(signal_meta) or select(SignalMeta(Base)) (See select1_stmts in 
 simple_select.py), in the more general case they do not necessarily render the same thing, as an ORM-mapped class may be
@@ -88,7 +86,7 @@ Base = declarative_base()  # callable returns a new base class from which new cl
 # function is in fact shorthand for first creating the registry with the registry constructor, and then generating a
 # base class using the registry.generate_base()
 
-# Base.metadata.create_all(engine_SQLServerTest_MainDB)  # Adds all ORM table classes to the specified DB by emitting
+# Base.metadata.create_all(engine_sqlservertest_main)  # Adds all ORM table classes to the specified DB by emitting
 # CREATE TABLE DDL
 
 

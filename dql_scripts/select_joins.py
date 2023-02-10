@@ -16,6 +16,7 @@ select_join_core_stmt1 = (
     .join_from(defect_root_cause, defect_event)
 )
 
+
 def get_select_join_rowslist_result(engine: sqlalchemy.engine, select_stmt):
     with engine.connect() as connection:
         logger.debug(f"Choosing joined data with following select-statement: {select_stmt}")

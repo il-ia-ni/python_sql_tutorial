@@ -15,5 +15,5 @@ url_hostname = build_full_url(
     odbc_driver="ODBC Driver 17 for SQL Server"
 )
 
-engine_sqlservertest_main = make_engine(url_hostname, timeout=1000, verbose=True)
+engine_sqlservertest_main = make_engine(url_hostname, timeout=100, verbose=True)
 

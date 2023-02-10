@@ -66,12 +66,12 @@ def make_engine(db_url: URL, timeout: int, verbose: bool = False) -> Engine:
 
     return create_engine(
         db_url,
-        timeout=timeout,
         # Following args concern DB logging: https://docs.sqlalchemy.org/en/14/core/engines.html#configuring-logging,
         echo=True,  # https://docs.sqlalchemy.org/en/14/core/engines.html#sqlalchemy.create_engine.params.echo
         echo_pool=True,  # https://docs.sqlalchemy.org/en/14/core/engines.html#sqlalchemy.create_engine.params.echo_pool
         logging_name="{0} engine".format(db_url.database),
-        future=True
+        future=True,
+        connect_args={"timeout": timeout}
     )
 
 

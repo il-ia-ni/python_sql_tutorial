@@ -22,7 +22,7 @@ global_session = get_session(sqlserver_engine)
 # smpl_sel.select_orm_signalmeta_testobjs_scalar_result(global_session)  # Returns selection result as a Scalar obj
 
 joins_scalar = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt1)  # Join with select.join_from()
-joins_rows = jnt_sel.get_select_join_rowslist_result(global_engine, jnt_sel.select_join_core_stmt1)  # Join with select.join_from()
+joins_rows = jnt_sel.get_select_join_rowslist_result(sqlserver_engine, jnt_sel.select_join_core_stmt1)  # Join with select.join_from()
 # joins_scalar2 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
 # joins_scalar3 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
@@ -39,7 +39,7 @@ logger.info(rows_df.head(5))
 pa_query_df = pa.read_sql_query(
     # See https://pandas.pydata.org/docs/reference/api/pandas.read_sql_query.html#pandas.read_sql_query
     sql=dql_scripts.select_joins.select_join_orm_stmt1,
-    con=global_engine,
+    con=sqlserver_engine,
     dtype={"signal_id": "string", "name": "string", "model_name": "string"},  # otherwise parsed as dtype 'object'
     # parse_dates={"update_date": "%c"},
     # parse_dates={"update_date": {"utc": True, "format": "%c"}}
