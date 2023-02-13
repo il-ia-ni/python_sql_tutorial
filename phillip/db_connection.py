@@ -70,7 +70,7 @@ def make_engine(db_url: URL, timeout: int, verbose: bool = False) -> Engine:
         echo=True,  # https://docs.sqlalchemy.org/en/14/core/engines.html#sqlalchemy.create_engine.params.echo
         echo_pool=True,  # https://docs.sqlalchemy.org/en/14/core/engines.html#sqlalchemy.create_engine.params.echo_pool
         logging_name="{0} engine".format(db_url.database),
-        future=True,
+        future=False,  # for pandas < 2.0 read_sql_query() to work with SQL Alchemy https://stackoverflow.com/a/72002758
         connect_args={"timeout": timeout}
     )
 
