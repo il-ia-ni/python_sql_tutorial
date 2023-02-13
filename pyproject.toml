@@ -4,11 +4,21 @@ version = "0.1.0"
 description = "Tutorial for working with RDB in Python Projects"
 authors = ["Ilia Nikolaenko <niil02@sms-group.com>"]
 
+[[tool.poetry.source]]
+name = "trusted_store"
+url = "https://pypi.org/simple"
+default = true
+
+[[tool.poetry.source]]
+name = "trusted_files"
+url = "https://files.pythonhosted.org/packages"
+default = false
+
 [tool.poetry.dependencies]
 python = "^3.9"
 
 numpy = "1.19.5"
-pandas = "1.3.1"
+pandas = "^1.3.1"
 
 # Databases
 SQLAlchemy = "^1.4.42"
