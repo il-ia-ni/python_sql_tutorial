@@ -2,6 +2,7 @@ import pandas as pa
 
 from phillip.db_connection import build_full_url, make_engine, get_session
 from db_engines.sql_server_engine import engine_sqlservertest_main as sqlserver_engine
+from data_analysis.dataframes import create_df_from_list, create_df_from_sql_request
 
 from loguru import logger
 from loguru_logging.debug_formatter import debug_format
@@ -21,30 +22,28 @@ global_session = get_session(sqlserver_engine)
 # smpl_sel.select_orm_signalmeta_testobjs(global_session)  # Returns a _engine.Result obj with Row objs
 # smpl_sel.select_orm_signalmeta_testobjs_scalar_result(global_session)  # Returns selection result as a Scalar obj
 
-joins_scalar = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt1)  # Join with select.join_from()
-joins_rows = jnt_sel.get_select_join_rowslist_result(sqlserver_engine, jnt_sel.select_join_core_stmt1)  # Join with select.join_from()
+joins_scalar, cols1 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt1)  # Join with select.join_from()
+joins_rows, cols2 = jnt_sel.get_select_join_rowslist_result(sqlserver_engine, jnt_sel.select_join_core_stmt1)  # Join with select.join_from()
 # joins_scalar2 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
 # joins_scalar3 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
-scalars_df = pa.DataFrame(joins_scalar)  # uses a list of Rows when selecting specific attrs / ORM instances when selecting a whole table
-scalars_df.rename_axis("ORM_DF", axis="columns")
-logger.info("A DataFrame with following parameters was created from the scalars list: \n", scalars_df.info())
-logger.info(scalars_df.head(5))
+# scalars_df = create_df_from_list(joins_scalar, cols1)
+# scalars_df.rename_axis("ORM_DF", axis="columns")
+# logger.info("A DataFrame with following parameters was created from the scalars list: \n", scalars_df.info())
+# logger.info(scalars_df.head(5))
 
-rows_df = pa.DataFrame(joins_rows)  # uses a list of Row instances
-rows_df.rename_axis("CORE_DF", axis="columns")
-logger.info("A DataFrame with following parameters was created from the rows list: \n", rows_df.info())
-logger.info(rows_df.head(5))
+# rows_df = create_df_from_list(joins_rows, cols2)
+# rows_df.rename_axis("CORE_DF", axis="columns")
+# logger.info("A DataFrame with following parameters was created from the rows list: \n", rows_df.info())
+# logger.info(rows_df.head(5))
 
-pa_query_df = pa.read_sql_query(
-    # See https://pandas.pydata.org/docs/reference/api/pandas.read_sql_query.html#pandas.read_sql_query
-    sql=dql_scripts.select_joins.select_join_orm_stmt1,
-    con=sqlserver_engine,
-    dtype={"signal_id": "string", "name": "string", "model_name": "string"},  # otherwise parsed as dtype 'object'
-    # parse_dates={"update_date": "%c"},
-    # parse_dates={"update_date": {"utc": True, "format": "%c"}}
+pa_query_df = create_df_from_sql_request(
+    dql_scripts.select_joins.select_join_orm_stmt1,
+    sqlserver_engine,
+    {"signal_id": "string", "name": "string", "model_name": "string"}
 )
 pa_query_df.rename_axis("SQL Query DF", axis="columns")
+
 logger.info("A DataFrame with following parameters was created from the SQL query: \n", pa_query_df.info())
 
 logger.info("Showing first 5 rows of the DF: \n{0}"

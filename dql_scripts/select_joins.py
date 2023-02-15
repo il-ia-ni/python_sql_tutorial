@@ -22,11 +22,12 @@ def get_select_join_rowslist_result(engine: sqlalchemy.engine, select_stmt):
     with engine.connect() as connection:
         logger.debug(f"Choosing joined data with following select-statement: {select_stmt}")
 
+        cols_names = connection.execute(select_stmt).keys()  # returns an iterable view of type RMKeyView
         result = connection.execute(select_stmt).all()  # Return all rows in a list
         logger.info("Session.execute() creates a list of instances of type {0}. An example of the first instance:\n{1}"
                     .format(type(result[0]), result[0])
                     )
-        return result
+        return result, cols_names
 
 
 """ AREA JOIN-Statements with ORM API"""
@@ -73,12 +74,13 @@ def get_select_join_orm_result(session: sqlalchemy.orm.session, select_stmt):
         logger.debug(f"Choosing joined data with following select-statement: {select_stmt}")
 
         # See https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#selecting-orm-entities-and-columns
-        result = session.execute(select_stmt).all()  # Return Rows of attributes / ORM instances in a list
+        cols_names = session.execute(select_stmt).keys()  # returns an iterable view of type RMKeyView
+        result = session.execute(select_stmt).all()
         # result = session.scalars(select_stmt).all()  # Return Rows of ORM instances in a list
         # result = session.scalars(select_stmt).fetchall()  # A synonym for the _engine.ScalarResult.all method.
         logger.info("Session.execute() creates a list of instances of type {0}. An example of the first instance:\n{1}"
                     .format(type(result[0]), result[0])
                     )
 
-        return result
+        return result, cols_names
 
