@@ -14,6 +14,7 @@ import dql_scripts.select_joins as jnt_sel
 debug_format()
 global_session = get_session(sqlserver_engine)
 
+# TODO: Move following lines to corresponding test scripts with pytest!
 # smpl_sel.select_core_signalmeta_all(global_engine)  # Selection from the table using Core API
 # smpl_sel.select_orm_signalmeta_all(global_session)  # Selection from the table using ORM API
 
