@@ -1,6 +1,7 @@
 import sqlalchemy
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.testing import in_
 
 from ddl_scripts.creating_tables import signal_meta, defect_event, defect_root_cause, SignalMeta, DefectEvent, DefectRootCause
 
@@ -47,9 +48,15 @@ select_join_orm_stmt2 = (
     select(DefectRootCause)
     .join(DefectEvent)
     .join(SignalMeta)
-    # .where(DefectRootCause.event_id == 2407026)
+    # Option 1 for a conjunct where-clause
+    .where(
+        or_(
+            DefectRootCause.event_id == 2407113, DefectRootCause.event_id == 2407026, DefectRootCause.event_id == 2407022
+        )
+    )
 )
 
+defect_event_ids = [2407113, 2407026, 2407022]
 
 select_join_orm_stmt3 = (
     # JOIN with only right-hand explicit side + explicit ON-clause
@@ -57,7 +64,7 @@ select_join_orm_stmt3 = (
     select(DefectRootCause)
     .join(DefectEvent, DefectRootCause.event_id == DefectEvent.event_id)
     .join(SignalMeta, DefectRootCause.signal_id == SignalMeta.id)
-    # .where(DefectRootCause.event_id == 2407022)
+    .filter(DefectRootCause.event_id.in_(defect_event_ids))
 )
 
 
