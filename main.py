@@ -22,8 +22,10 @@ global_session = get_session(sqlserver_engine)
 # smpl_sel.select_orm_signalmeta_testobjs(global_session)  # Returns a _engine.Result obj with Row objs
 # smpl_sel.select_orm_signalmeta_testobjs_scalar_result(global_session)  # Returns selection result as a Scalar obj
 
-joins_scalar, cols1 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt1)  # Join with select.join_from()
-joins_rows, cols2 = jnt_sel.get_select_join_rowslist_result(sqlserver_engine, jnt_sel.select_join_core_stmt1)  # Join with select.join_from()
+joins_scalar, cols1 = jnt_sel.get_select_join_orm_result(global_session,
+                                                         jnt_sel.select_join_orm_stmt1)
+joins_rows, cols2 = jnt_sel.get_select_join_rowslist_result(sqlserver_engine,
+                                                            jnt_sel.select_join_core_stmt1)
 # joins_scalar2 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
 # joins_scalar3 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
@@ -50,7 +52,8 @@ logger.info("Showing first 5 rows of the DF: \n{0}"
             .format(pa_query_df[:5])
             )
 logger.info("Showing 4 columns of the first {0} rows of the DF: \n{1}"
-            .format(10, pa_query_df.loc[:, ["update_date", "event_id", "signal_id", "importance", "name", "model_name"]].head(10))
+            .format(10, pa_query_df.loc[:,
+                        ["update_date", "event_id", "signal_id", "importance", "name", "model_name"]].head(10))
             )
 logger.info("Showing 4 columns of the rows {0}-{1} of the DF: \n{2}"
             .format(2, 5, pa_query_df.loc[2:5, "update_date":"model_name"])
@@ -61,11 +64,5 @@ logger.info("Selecting data rows with signal_id {0}: \n{1}"
             )
 logger.info("Selecting first {0} data rows with update_date after {1}: \n{2}"
             .format(10, "2022-12-23",
-                    pa_query_df.loc[lambda df: df['update_date'] > "2022-12-23", "update_date":"model_name"
-                    ].head(10))
+                    pa_query_df.loc[lambda df: df['update_date'] > "2022-12-23", "update_date":"model_name"].head(10))
             )  # selection by callable https://pandas.pydata.org/docs/user_guide/indexing.html#indexing-callable
-
-
-
-
-
