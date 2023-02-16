@@ -2,7 +2,8 @@ import pandas as pa
 
 from phillip.db_connection import build_full_url, make_engine, get_session
 from db_engines.sql_server_engine import engine_sqlservertest_main as sqlserver_engine
-from data_analysis.dataframes import create_df_from_list, create_df_from_sql_request
+from data_analysis.dataframes import create_df_from_sql_request
+from data_analysis import defect_event_root_cause, defect_root_cause_pairs
 
 from loguru import logger
 from loguru_logging.debug_formatter import debug_format
@@ -14,7 +15,7 @@ import dql_scripts.select_joins as jnt_sel
 debug_format()
 global_session = get_session(sqlserver_engine)
 
-# TODO: Move following lines to corresponding test scripts with pytest!
+# TODO: Move following lines to corresponding __name__="__main__" scripts!
 # smpl_sel.select_core_signalmeta_all(global_engine)  # Selection from the table using Core API
 # smpl_sel.select_orm_signalmeta_all(global_session)  # Selection from the table using ORM API
 
@@ -22,23 +23,6 @@ global_session = get_session(sqlserver_engine)
 
 # smpl_sel.select_orm_signalmeta_testobjs(global_session)  # Returns a _engine.Result obj with Row objs
 # smpl_sel.select_orm_signalmeta_testobjs_scalar_result(global_session)  # Returns selection result as a Scalar obj
-
-joins_scalar, cols1 = jnt_sel.get_select_join_orm_result(global_session,
-                                                         jnt_sel.select_join_orm_stmt1)
-joins_rows, cols2 = jnt_sel.get_select_join_rowslist_result(sqlserver_engine,
-                                                            jnt_sel.select_join_core_stmt1)
-# joins_scalar2 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
-# joins_scalar3 = jnt_sel.get_select_join_orm_result(global_session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
-
-# scalars_df = create_df_from_list(joins_scalar, cols1)
-# scalars_df.rename_axis("ORM_DF", axis="columns")
-# logger.info("A DataFrame with following parameters was created from the scalars list: \n", scalars_df.info())
-# logger.info(scalars_df.head(5))
-
-# rows_df = create_df_from_list(joins_rows, cols2)
-# rows_df.rename_axis("CORE_DF", axis="columns")
-# logger.info("A DataFrame with following parameters was created from the rows list: \n", rows_df.info())
-# logger.info(rows_df.head(5))
 
 pa_query_df = create_df_from_sql_request(
     dql_scripts.select_joins.select_join_orm_stmt1,
