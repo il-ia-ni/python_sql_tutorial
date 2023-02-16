@@ -30,7 +30,7 @@ signal_meta = Table(
     Column("description", String(1024), nullable=True),
     Column("y_lim_min", Float, nullable=True),
     Column("y_lim_max", Float, nullable=True),
-    schema="Cracs_preventer_test"
+    schema="main"
 )
 
 defect_event = Table(
@@ -56,7 +56,7 @@ defect_event = Table(
     Column("event_type", String(10), nullable=False),
     Column("model_type", String(10), nullable=False),
     Column("strand_id", String(256), nullable=False),
-    schema="Cracs_preventer_test"
+    schema="main"
 )
 
 defect_root_cause = Table(
@@ -70,7 +70,7 @@ defect_root_cause = Table(
     Column("importance", Float, nullable=True),
     Column("data_start_time", DateTime, nullable=True),
     Column("data_end_time", DateTime, nullable=True),
-    schema="Cracs_preventer_test"
+    schema="main"
 )
 
 """
@@ -96,7 +96,7 @@ class SignalMeta(Base):  # ORM class
     # and https://docs.sqlalchemy.org/en/14/orm/declarative_tables.html#orm-declarative-table
     __tablename__ = "signal_meta"  # Must correspond to Table name in the DB!
     __table_args__ = {
-        "schema": "Cracs_preventer_test"}  # Found @ https://stackoverflow.com/questions/47077649/how-do-i-set-the-schema-in-sqlalchemy-for-mssql
+        "schema": "main"}  # Found @ https://stackoverflow.com/questions/47077649/how-do-i-set-the-schema-in-sqlalchemy-for-mssql
 
     id = Column(String(128), primary_key=True, nullable=False)
     create_date = Column(DateTime, nullable=False)
@@ -118,7 +118,7 @@ class SignalMeta(Base):  # ORM class
 
 class DefectEvent(Base):
     __tablename__ = "defect_event"
-    __table_args__ = {"schema": "Cracs_preventer_test"}
+    __table_args__ = {"schema": "main"}
 
     create_date = Column(DateTime, nullable=False)
     update_date = Column(DateTime, nullable=False)
@@ -148,7 +148,7 @@ class DefectEvent(Base):
 
 class DefectRootCause(Base):
     __tablename__ = "defect_root_cause"
-    __table_args__ = {"schema": "Cracs_preventer_test"}
+    __table_args__ = {"schema": "main"}
 
     create_date = Column(DateTime, nullable=False)
     update_date = Column(DateTime, nullable=False)
