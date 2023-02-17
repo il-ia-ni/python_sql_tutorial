@@ -51,10 +51,11 @@ def root_cause_pairs_query(date: str, signals: tuple[str, ...]) -> str:
         FROM main.defect_event A INNER JOIN main.defect_root_cause B 
             on A.event_id=B.event_id 
         WHERE A.event_id IN (
-            SELECT event_id FROM main.defect_root_cause
-            WHERE signal_id IN {signals}
+            SELECT event_id 
+            FROM main.defect_root_cause
+            WHERE signal_id NOT IN {signals}
                 AND slab_id IS NOT null
-                AND create_date BETWEEN CAST({date} AS DATE) and GETDATE()
+                AND create_date BETWEEN CAST(\'{date}' AS DATE) and GETDATE()
             GROUP BY event_id 
             HAVING COUNT(event_id) > 1 AND COUNT(event_id) < 3
         )
@@ -98,7 +99,7 @@ if __name__ == "__main__":
     session = create_session_from_url(url=URL, odbc_driver=app_odbc_driver)
     data = extract_root_cause_pairs(
         session=session,
-        date='2022-01-01',
+        date='2022-12-23',
         signals_to_filter=("casting_length_1", "casting_length_C")
     )
     logger.info(data)
