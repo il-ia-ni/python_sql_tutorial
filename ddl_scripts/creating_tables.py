@@ -152,9 +152,9 @@ class DefectRootCause(Base):
 
     create_date = Column(DateTime, nullable=False)
     update_date = Column(DateTime, nullable=False)
-    event_id = Column(Integer, ForeignKey("Cracs_preventer_test.defect_event.event_id"), primary_key=True,
+    event_id = Column(Integer, ForeignKey("main.defect_event.event_id"), primary_key=True,
                       nullable=False)
-    signal_id = Column(Integer, ForeignKey("Cracs_preventer_test.signal_meta.id"), primary_key=True, nullable=False)
+    signal_id = Column(Integer, ForeignKey("main.signal_meta.id"), primary_key=True, nullable=False)
     importance = Column(Float, nullable=True)
     data_start_time = Column(DateTime, nullable=True)
     data_end_time = Column(DateTime, nullable=True)
