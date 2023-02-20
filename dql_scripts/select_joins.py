@@ -37,7 +37,7 @@ select_join_orm_stmt1 = (
     # JOIN with left and right explicit sides + automatic ON-clause
     # See https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#explicit-from-clauses-and-joins
     select(DefectRootCause.update_date, DefectRootCause.event_id, DefectRootCause.signal_id, DefectRootCause.importance,
-           SignalMeta.name, DefectEvent.model_name)
+           DefectRootCause.signal_data, SignalMeta.name, DefectEvent.model_name, DefectEvent.slab_id)
     .join_from(DefectRootCause, DefectEvent)  # https://docs.sqlalchemy.org/en/14/core/selectable.html#sqlalchemy.sql.expression.Select.join_from
     .join_from(DefectRootCause, SignalMeta)
     # .where(DefectRootCause.event_id == 2407113)

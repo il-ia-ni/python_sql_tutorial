@@ -71,12 +71,14 @@ def join_defect_event_root_cause_filter_behaviour_id(session: Session,
                         DefectEvent.event_type,
                         DefectEvent.event_id,
                         DefectEvent.caster_id,
+                        DefectEvent.slab_id,
                         DefectEvent.strand_id,
                         DefectEvent.grade_id,
                         DefectEvent.behaviour_pattern_id,
                         DefectEvent.detection_probability,
                         DefectRootCause.signal_id,
                         DefectRootCause.importance,
+                        DefectRootCause.signal_data
                         )\
         .join(DefectEvent, DefectRootCause.event_id == DefectEvent.event_id) \
         .filter(DefectEvent.behaviour_pattern_id.in_(defects)) \
