@@ -154,10 +154,11 @@ class DefectRootCause(Base):
     update_date = Column(DateTime, nullable=False)
     event_id = Column(Integer, ForeignKey("main.defect_event.event_id"), primary_key=True,
                       nullable=False)
-    signal_id = Column(Integer, ForeignKey("main.signal_meta.id"), primary_key=True, nullable=False)
+    signal_id = Column(String(128), ForeignKey("main.signal_meta.id"), primary_key=True, nullable=False)
     importance = Column(Float, nullable=True)
     data_start_time = Column(DateTime, nullable=True)
     data_end_time = Column(DateTime, nullable=True)
+    signal_data = Column(String)
 
     # def __repr__(self):
     #     # method is not required but is useful for debugging
