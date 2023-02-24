@@ -53,6 +53,7 @@ def create_df_from_sql_request(select_statement, engine: sqlalchemy.engine, dtyp
 
 
 # TODO: Write a unit test with pytest!
+# TODO: Implement the rest of the logic from Phillip's Jupiter Notebook for assigning group names to the signals 
 # This method is tested in script plots.py!
 def df_from_group(group: pd.DataFrame):
     """ Creates DataFrames from corresponding signals json-data of each event entry from the DB
