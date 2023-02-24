@@ -1,9 +1,11 @@
 """
 This script contains methods for creating pandas DataFrames from relations of a database using sql-statements
 """
+from __future__ import annotations
 
 import pandas as pd
 import sqlalchemy
+from sqlalchemy.engine.row import Row, LegacyRow
 from loguru import logger
 
 import dql_scripts.select_joins
@@ -14,11 +16,13 @@ from dql_scripts import select_joins as jnt_sel
 from db_engines.sql_server_engine import engine_sqlservertest_main as sqlserver_engine
 
 
-def create_df_from_list(rows_data_list: list, columns_list: list) -> pd.DataFrame:
+def create_df_from_sqlrows(rows_data_list: list[Row | LegacyRow], columns_list: list) -> pd.DataFrame:
     """
     Creates a pandas DataFrame based on a list of selection result Rows instances that were already created using f.e.
     SQL Alchemy Core API or ORM API
-    :param rows_data_list: a list of Rows instances of a select result
+    :param rows_data_list: a list of Rows instances of a result of a selection from DB. Union type Annotation is written
+    with the new Union Type Operator T1 | T2 (introduced in Python 3.10 as alternative to the old Union[T1, T2] syntax.
+    See https://docs.python.org/3.10/whatsnew/3.10.html#pep-604-new-type-union-operator
     :param columns_list: an iterable with the strings of attributes names of the select result
     :return: a pandas dataframe with the data of the list with the selection result
     """
@@ -62,13 +66,13 @@ if __name__ == "__main__":
     joins_scalar3 = jnt_sel.get_select_join_orm_result(session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
     # Create a DataFrame from the list of the query result Rows created with ORM API
-    scalars_df = create_df_from_list(joins_scalar, cols1)
+    scalars_df = create_df_from_sqlrows(joins_scalar, cols1)
     scalars_df.rename_axis("ORM_DF", axis="columns")
     logger.info("A DataFrame with following parameters was created from the scalars list: \n", scalars_df.info())
     logger.info(scalars_df.head(5))
 
     # Create a DataFrame from the list of the query result Rows created with Core API
-    rows_df = create_df_from_list(joins_rows, cols2)
+    rows_df = create_df_from_sqlrows(joins_rows, cols2)
     rows_df.rename_axis("CORE_DF", axis="columns")
     logger.info("A DataFrame with following parameters was created from the rows list: \n", rows_df.info())
     logger.info(rows_df.head(5))
