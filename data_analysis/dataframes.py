@@ -52,6 +52,7 @@ def create_df_from_sql_request(select_statement, engine: sqlalchemy.engine, dtyp
     )
 
 
+# TODO: Write a unit test with pytest!
 # This method is tested in script plots.py!
 def df_from_group(group: pd.DataFrame):
     """ Creates DataFrames from corresponding signals json-data of each event entry from the DB
@@ -63,10 +64,7 @@ def df_from_group(group: pd.DataFrame):
     for index, row in group.iterrows():
         signal_data = row['signal_data']
         # https://arctype.com/blog/json-database-when-use/
-
-        #print(signal_data)
-        #print(json.loads(signal_data))
-        signal_data_json = json.loads(json.loads(signal_data))  # TODO: why is there a doubled parsing of json to obj?
+        signal_data_json = json.loads(signal_data)  # TODO: why is there a doubled parsing of json to obj?
         print(signal_data_json)
         signal_data_df = pd.DataFrame(signal_data_json['data'], columns=['time', signal_data_json['signal_id']])
         signal_data_df['time'] = pd.to_datetime(signal_data_df['time'])

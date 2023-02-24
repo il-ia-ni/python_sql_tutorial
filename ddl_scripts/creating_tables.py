@@ -1,4 +1,4 @@
-from sqlalchemy import Table, MetaData, Column, ForeignKey, Integer, String, DateTime, Float
+from sqlalchemy import Table, MetaData, Column, ForeignKey, Integer, String, DateTime, Float, JSON
 from sqlalchemy.orm import declarative_base, relationship
 
 """
@@ -158,7 +158,7 @@ class DefectRootCause(Base):
     importance = Column(Float, nullable=True)
     data_start_time = Column(DateTime, nullable=True)
     data_end_time = Column(DateTime, nullable=True)
-    signal_data = Column(String)
+    signal_data = Column(JSON)
 
     # def __repr__(self):
     #     # method is not required but is useful for debugging
