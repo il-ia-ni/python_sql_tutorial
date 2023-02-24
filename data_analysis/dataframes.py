@@ -2,16 +2,17 @@
 This script contains methods for creating pandas DataFrames from relations of a database using sql-statements
 """
 from __future__ import annotations
+import json
 
 import pandas as pd
 import sqlalchemy
 from sqlalchemy.engine.row import Row, LegacyRow
 from loguru import logger
 
+from phillip.db_connection import create_session_from_url
 import dql_scripts.select_joins
 from db_engines.db_sources_data.sql_server_test_localhost import SQLServerTestDBs
 from db_engines.sql_server_engine import url_SQLServerTestDBMS
-from phillip.db_connection import create_session_from_url
 from dql_scripts import select_joins as jnt_sel
 from db_engines.sql_server_engine import engine_sqlservertest_main as sqlserver_engine
 
@@ -49,6 +50,30 @@ def create_df_from_sql_request(select_statement, engine: sqlalchemy.engine, dtyp
         # parse_dates={"update_date": "%c"},
         # parse_dates={"update_date": {"utc": True, "format": "%c"}}
     )
+
+
+# This method is tested in script plots.py!
+def df_from_group(group: pd.DataFrame):
+    """ Creates DataFrames from corresponding signals json-data of each event entry from the DB
+    See https://docs.sqlalchemy.org/en/14/dialects/mssql.html#sqlalchemy.dialects.mssql.JSON
+    :param group: A DataFrame of events and root cause data
+    :return: a formatted DataFrame of signals data for a single event
+    """
+    df_list = []
+    for index, row in group.iterrows():
+        signal_data = row['signal_data']
+        # https://arctype.com/blog/json-database-when-use/
+
+        #print(signal_data)
+        #print(json.loads(signal_data))
+        signal_data_json = json.loads(json.loads(signal_data))  # TODO: why is there a doubled parsing of json to obj?
+        print(signal_data_json)
+        signal_data_df = pd.DataFrame(signal_data_json['data'], columns=['time', signal_data_json['signal_id']])
+        signal_data_df['time'] = pd.to_datetime(signal_data_df['time'])
+        signal_data_df = signal_data_df.set_index('time')
+        df_list.append(signal_data_df)
+    df_concate = pd.concat(df_list, axis=1)
+    return df_concate
 
 
 # For direct script execution without calling its methods in main.py:
