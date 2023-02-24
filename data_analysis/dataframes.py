@@ -64,7 +64,7 @@ def df_from_group(group: pd.DataFrame):
     for index, row in group.iterrows():
         signal_data = row['signal_data']
         # https://arctype.com/blog/json-database-when-use/
-        signal_data_json = json.loads(signal_data)  # TODO: why is there a doubled parsing of json to obj?
+        signal_data_json = json.loads(signal_data)
         print(signal_data_json)
         signal_data_df = pd.DataFrame(signal_data_json['data'], columns=['time', signal_data_json['signal_id']])
         signal_data_df['time'] = pd.to_datetime(signal_data_df['time'])
