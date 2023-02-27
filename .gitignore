@@ -128,4 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 db_engines/sqlite_db/testdb.sqlite
-local_repos/fallback_db
+local_repos/fallback_db.sqlite

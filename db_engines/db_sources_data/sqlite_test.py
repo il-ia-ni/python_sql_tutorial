@@ -8,5 +8,5 @@ from config.definitions import ROOT_DIR  # Found @ https://towardsdatascience.co
 dbdriver = "sqlite+pysqlite"  # https://docs.sqlalchemy.org/en/14/core/engines.html#sqlite
 # pysqlite dialect: https://docs.sqlalchemy.org/en/14/dialects/sqlite.html#pysqlite
 # It uses Python module sqlite3 (by default -> "pysqlite" is opt): https://docs.python.org/3/library/sqlite3.html
-dbpath = f"//{ROOT_DIR}\\local_repos\\fallback_db"
+dbpath = f"//{ROOT_DIR}\\local_repos\\fallback_db.sqlite"
 
