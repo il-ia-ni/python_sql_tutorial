@@ -1,8 +1,5 @@
-from sqlalchemy import Table, MetaData, Column, ForeignKey, Integer, String, DateTime, Float
+from sqlalchemy import Table, MetaData, Column, ForeignKey, Integer, String, DateTime, Float, JSON
 from sqlalchemy.orm import declarative_base, relationship
-
-from db_engines.sql_server_engine import engine_SQLServerTest_MainDB
-from db_engines.sqlite_engine import engine_SQLite_TestDB
 
 """
 While the SQL looks the same whether we invoke select(signal_meta) or select(SignalMeta(Base)) (See select1_stmts in 
@@ -89,6 +86,9 @@ Base = declarative_base()  # callable returns a new base class from which new cl
 # function is in fact shorthand for first creating the registry with the registry constructor, and then generating a
 # base class using the registry.generate_base()
 
+# Base.metadata.create_all(engine_sqlservertest_main)  # Adds all ORM table classes to the specified DB by emitting
+# CREATE TABLE DDL
+
 
 class SignalMeta(Base):  # ORM class
     # __table_name__ + Column-props form a SQLAlchemy table metadata with Declarative Table configuration using both
@@ -158,14 +158,8 @@ class DefectRootCause(Base):
     importance = Column(Float, nullable=True)
     data_start_time = Column(DateTime, nullable=True)
     data_end_time = Column(DateTime, nullable=True)
+    signal_data = Column(JSON)
 
     # def __repr__(self):
     #     # method is not required but is useful for debugging
     #     return f"DefectRootCause with EventId: {self.event_id!r} and SignalID: {self.signal_id!r}"
-
-# SQLAlchemy 2 doesn't support engine.execute(). SQLite as backup solution for a main DB had to
-# be loaded in-memory as schema name. https://stackoverflow.com/a/44877481
-# Base.metadata.create_all(engine_SQLite_TestDB.execute("attach ':memory:' as Cracs_preventer_test"))
-
-# Base.metadata.create_all(engine_SQLite_TestDB)
-

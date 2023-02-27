@@ -3,14 +3,18 @@ from datetime import datetime
 import sqlalchemy
 from sqlalchemy import text, select
 
+from db_engines.db_sources_data.sql_server_test_localhost import SQLServerTestDBs
+from db_engines.sql_server_engine import url_SQLServerTestDBMS
 from ddl_scripts.creating_tables import signal_meta, SignalMeta
+from phillip.db_connection import create_session_from_url
+from db_engines.sql_server_engine import engine_sqlservertest_main as sqlserver_engine
 
 select1_core_stmt = select(signal_meta)  # uses Core API Table instance with MetaData. See creating_tables.py
 select1_orm_stmt = select(SignalMeta)  # uses class mapped from the ORM API's Base Class. See creating_tables.py
 select2_core_stmt = select(signal_meta.c.id, signal_meta.c.category, signal_meta.c.name)
-select2_orm_stmt = text("SELECT id, category, name FROM Cracs_preventer_test.signal_meta WHERE id > :id ORDER BY id, category")
-select3_stmt = text("SELECT id, name, description, update_date FROM Cracs_preventer_test.signal_meta WHERE id = :id ORDER BY id")
-update1_stmt = text("UPDATE Cracs_preventer_test.signal_meta SET update_date=:upd_date, description=:descr WHERE id=:id")
+select2_orm_stmt = text("SELECT id, category, name FROM main.signal_meta WHERE id > :id ORDER BY id, category")
+select3_stmt = text("SELECT id, name, description, update_date FROM main.signal_meta WHERE id = :id ORDER BY id")
+update1_stmt = text("UPDATE main.signal_meta SET update_date=:upd_date, description=:descr WHERE id=:id")
 
 """ Connection.execute() in Core API
 Selecting Rows with Core API or ORM API: https://docs.sqlalchemy.org/en/14/tutorial/data_select.html#tutorial-selecting-data
@@ -67,7 +71,7 @@ def select_orm_signalmeta_all(session: sqlalchemy.orm.session):
 def select_orm_signalmeta_testobjs(session: sqlalchemy.orm.session):
     # See https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html#tutorial-executing-orm-session
     with session:
-        """ "Release" any connection pools
+        """ "Release" ans connection pools
         When the Connection is closed at the end of the with: block, the referenced DBAPI connection is released to the 
         connection pool. From the perspective of the database itself, the connection pool will not actually “close” the 
         connection assuming the pool has room to store this connection for the next use. When the connection is returned 
@@ -112,4 +116,22 @@ def select_orm_signalmeta_testobjs_scalar_result(session: sqlalchemy.orm.session
         print("Scalar select output:", session.scalar(local_select_stmt))
         # for signal in session2.scalar(select_stmt):
         #     print("Scalar select output:", signal)
+
+
+# For direct script execution without calling its methods in main.py:
+if __name__ == "__main__":
+    # More to dunder name variable __name__: https://www.pythontutorial.net/python-basics/python-__name__/
+
+    app_odbc_driver = "ODBC Driver 17 for SQL Server"
+    URL = url_SQLServerTestDBMS + SQLServerTestDBs.MASTER_DB.value
+    session = create_session_from_url(url=URL, odbc_driver=app_odbc_driver)
+
+    select_core_signalmeta_all(sqlserver_engine)  # Selection from the table using Core API
+    select_orm_signalmeta_all(session)  # Selection from the table using ORM API
+
+    select_core_signalmeta_3cols(sqlserver_engine)  # selects 3 cols from a Core API Table obj
+
+    select_orm_signalmeta_testobjs(session)  # Returns a _engine.Result obj with Row objs
+    select_orm_signalmeta_testobjs_scalar_result(session)  # Returns selection result as a Scalar obj
+
 

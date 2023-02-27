@@ -15,11 +15,11 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="testdb.sqlite" single-connection="true" uuid="2483af19-c080-4cf6-9b2d-eb854a672638">
-      <driver-ref>sqlite.xerial</driver-ref>
+    <data-source source="LOCAL" name="@GRYSQLA01" read-only="true" single-connection="true" uuid="2dbd72cb-3a20-4600-a332-463fc367e22d">
+      <driver-ref>sqlserver.jtds</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\niil02\Documents\git\tutorials\python_sql_tutorial\db_engines\sqlite_db\testdb.sqlite</jdbc-url>
+      <jdbc-driver>net.sourceforge.jtds.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:jtds:sqlserver://GRYSQLA01:1433</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
