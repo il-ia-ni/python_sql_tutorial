@@ -9,6 +9,7 @@ import sqlalchemy
 from sqlalchemy.engine.row import Row, LegacyRow
 from loguru import logger
 
+from db_engines.sqlite_engine import url_SQLite_TestDB
 from phillip.db_connection import create_session_from_url
 import dql_scripts.select_joins
 from db_engines.db_sources_data.sql_server_test_localhost import SQLServerTestDBs
@@ -78,8 +79,8 @@ def df_from_group(group: pd.DataFrame):
 # For direct script execution without calling its methods in main.py:
 if __name__ == "__main__":
     # More to dunder name variable __name__: https://www.pythontutorial.net/python-basics/python-__name__/
-    app_odbc_driver = "ODBC Driver 17 for SQL Server"
-    URL = url_SQLServerTestDBMS + SQLServerTestDBs.MASTER_DB.value
+    app_odbc_driver = ""
+    URL = url_SQLite_TestDB
     session = create_session_from_url(url=URL, odbc_driver=app_odbc_driver)
 
     joins_scalar, cols1 = jnt_sel.get_select_join_orm_result(session,
