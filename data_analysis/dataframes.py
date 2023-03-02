@@ -87,8 +87,8 @@ if __name__ == "__main__":
                                                              jnt_sel.select_join_orm_stmt1)
     joins_rows, cols2 = jnt_sel.get_select_join_rowslist_result(sqlserver_engine,
                                                                 jnt_sel.select_join_core_stmt1)
-    joins_scalar2 = jnt_sel.get_select_join_orm_result(session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
-    joins_scalar3 = jnt_sel.get_select_join_orm_result(session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
+    joins_scalar2, cols3 = jnt_sel.get_select_join_orm_result(session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
+    joins_scalar3, cols4 = jnt_sel.get_select_join_orm_result(session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
     # Create a DataFrame from the list of the query result Rows created with ORM API
     scalars_df = create_df_from_sqlrows(joins_scalar, cols1)

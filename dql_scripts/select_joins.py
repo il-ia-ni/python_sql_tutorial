@@ -52,12 +52,12 @@ select_join_orm_stmt2 = (
     # Option 1 for a conjunct where-clause
     .where(
         or_(
-            DefectRootCause.event_id == 2407113, DefectRootCause.event_id == 2407026, DefectRootCause.event_id == 2407022
+            DefectRootCause.event_id == 2519108, DefectRootCause.event_id == 2519124, DefectRootCause.event_id == 2519383
         )
     )
 )
 
-defect_event_ids = [2407113, 2407026, 2407022]
+defect_event_ids = (2520895, 2520927, 2521324)
 
 select_join_orm_stmt3 = (
     # JOIN with only right-hand explicit side + explicit ON-clause
@@ -78,9 +78,13 @@ def get_select_join_orm_result(session: sqlalchemy.orm.session, select_stmt):
         result = session.execute(select_stmt).all()
         # result = session.scalars(select_stmt).all()  # Return Rows of ORM instances in a list
         # result = session.scalars(select_stmt).fetchall()  # A synonym for the _engine.ScalarResult.all method.
-        logger.info("Session.execute() creates a list of instances of type {0}. An example of the first instance:\n{1}"
-                    .format(type(result[0]), result[0])
-                    )
+        if len(result) > 0:
+            logger.info(
+                "Session.execute() creates a list of instances of type {0}. An example of the first instance:\n{1}"
+                .format(type(result[0]), result[0])
+                )
+        else:
+            logger.info("No elements found in the result of the request!")
 
         return result, cols_names
 
