@@ -11,10 +11,11 @@ from loguru import logger
 
 from phillip.db_connection import create_session_from_url
 import dql_scripts.select_joins
-from db_engines.db_sources_data.sql_server_test_localhost import SQLServerTestDBs
-from db_engines.sql_server_engine import url_SQLServerTestDBMS
 from dql_scripts import select_joins as jnt_sel
+from db_engines.db_sources_data.sql_server_test_localhost import SQLServerTestDBs
+from db_engines.sql_server_engine import url_SQLServerTestDBMS as sql_server_url
 from db_engines.sql_server_engine import engine_sqlservertest_main as sqlserver_engine
+from db_engines.sqlite_engine import url_hostname as sqlite_url, engine_sqlitetest_main as sqlite_engine
 
 
 def create_df_from_sqlrows(rows_data_list: list[Row | LegacyRow], columns_list: list) -> pd.DataFrame:
@@ -78,16 +79,16 @@ def df_from_group(group: pd.DataFrame):
 # For direct script execution without calling its methods in main.py:
 if __name__ == "__main__":
     # More to dunder name variable __name__: https://www.pythontutorial.net/python-basics/python-__name__/
-    app_odbc_driver = "ODBC Driver 17 for SQL Server"
-    URL = url_SQLServerTestDBMS + SQLServerTestDBs.MASTER_DB.value
+    app_odbc_driver = ""
+    URL = sqlite_url
     session = create_session_from_url(url=URL, odbc_driver=app_odbc_driver)
 
     joins_scalar, cols1 = jnt_sel.get_select_join_orm_result(session,
                                                              jnt_sel.select_join_orm_stmt1)
-    joins_rows, cols2 = jnt_sel.get_select_join_rowslist_result(sqlserver_engine,
+    joins_rows, cols2 = jnt_sel.get_select_join_rowslist_result(sqlite_engine,
                                                                 jnt_sel.select_join_core_stmt1)
-    joins_scalar2 = jnt_sel.get_select_join_orm_result(session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
-    joins_scalar3 = jnt_sel.get_select_join_orm_result(session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
+    joins_scalar2, cols3 = jnt_sel.get_select_join_orm_result(session, jnt_sel.select_join_orm_stmt2)  # Join with select.join()
+    joins_scalar3, cols4 = jnt_sel.get_select_join_orm_result(session, jnt_sel.select_join_orm_stmt3)  # Join with join() and explicit ON
 
     # Create a DataFrame from the list of the query result Rows created with ORM API
     scalars_df = create_df_from_sqlrows(joins_scalar, cols1)
@@ -104,7 +105,7 @@ if __name__ == "__main__":
     # Create a DataFrame with pandas sql_query() + display infos of the DF
     pa_query_df = create_df_from_sql_request(
         dql_scripts.select_joins.select_join_orm_stmt1,
-        sqlserver_engine,
+        sqlite_engine,
         {"signal_id": "string", "name": "string", "model_name": "string"}
     )
     pa_query_df.rename_axis("SQL Query DF", axis="columns")

@@ -10,7 +10,8 @@ import pandas as pd
 from loguru import logger
 
 from db_engines.db_sources_data.sql_server_test_localhost import SQLServerTestDBs
-from db_engines.sql_server_engine import url_SQLServerTestDBMS
+from db_engines.sql_server_engine import url_SQLServerTestDBMS as sql_server_url
+from db_engines.sqlite_engine import url_hostname as sqlite_url
 from ddl_scripts.creating_tables import DefectEvent, DefectRootCause
 from phillip.db_connection import create_session_from_url
 
@@ -93,8 +94,8 @@ def join_defect_event_root_cause_filter_behaviour_id(session: Session,
 # For direct script execution without calling its methods in main.py:
 if __name__ == "__main__":
     # More to dunder name variable __name__: https://www.pythontutorial.net/python-basics/python-__name__/
-    app_odbc_driver = "ODBC Driver 17 for SQL Server"
-    URL = url_SQLServerTestDBMS + SQLServerTestDBs.MASTER_DB.value
+    app_odbc_driver = ""
+    URL = sqlite_url
     session = create_session_from_url(url=URL, odbc_driver=app_odbc_driver)
     data = join_defect_event_root_cause()
     data_1 = join_defect_event_root_cause_filter_event_id(19826, 2452843, 2406977, 2452847)

@@ -1,5 +1,7 @@
-from sqlalchemy import Table, MetaData, Column, ForeignKey, Integer, String, DateTime, Float, JSON
+from sqlalchemy import Table, MetaData, Column, ForeignKey, Integer, String, DateTime, Float, JSON, BigInteger
 from sqlalchemy.orm import declarative_base, relationship
+
+from db_engines.sqlite_engine import engine_sqlitetest_main
 
 """
 While the SQL looks the same whether we invoke select(signal_meta) or select(SignalMeta(Base)) (See select1_stmts in 
@@ -79,16 +81,10 @@ See @ https://docs.sqlalchemy.org/en/14/tutorial/metadata.html#tutorial-orm-tabl
 Declarative Mapping: https://docs.sqlalchemy.org/en/14/orm/mapping_styles.html#orm-declarative-mapping
 """
 
-Base = declarative_base()  # callable returns a new base class from which new classes to be mapped may inherit from.
-
-
-# The base class refers to a registry object that maintains a collection of related mapped classes. declarative_base()
-# function is in fact shorthand for first creating the registry with the registry constructor, and then generating a
-# base class using the registry.generate_base()
-
-# Base.metadata.create_all(engine_sqlservertest_main)  # Adds all ORM table classes to the specified DB by emitting
-# CREATE TABLE DDL
-
+Base = declarative_base()  # a callable, gets a new base class from which new classes to be mapped may inherit from
+    # The base class refers to a registry object that maintains a collection of related mapped classes.
+    # declarative_base() function is in fact a shorthand for first creating the registry with the registry constructor
+    # and then generating a base class using the registry.generate_base()
 
 class SignalMeta(Base):  # ORM class
     # __table_name__ + Column-props form a SQLAlchemy table metadata with Declarative Table configuration using both
@@ -152,7 +148,7 @@ class DefectRootCause(Base):
 
     create_date = Column(DateTime, nullable=False)
     update_date = Column(DateTime, nullable=False)
-    event_id = Column(Integer, ForeignKey("main.defect_event.event_id"), primary_key=True,
+    event_id = Column(BigInteger, ForeignKey("main.defect_event.event_id"), primary_key=True,
                       nullable=False)
     signal_id = Column(String(128), ForeignKey("main.signal_meta.id"), primary_key=True, nullable=False)
     importance = Column(Float, nullable=True)
@@ -163,3 +159,11 @@ class DefectRootCause(Base):
     # def __repr__(self):
     #     # method is not required but is useful for debugging
     #     return f"DefectRootCause with EventId: {self.event_id!r} and SignalID: {self.signal_id!r}"
+
+
+# For direct script execution without calling its methods in main.py:
+if __name__ == "__main__":
+    # More to dunder name variable __name__: https://www.pythontutorial.net/python-basics/python-__name__/
+
+    Base.metadata.create_all(engine_sqlitetest_main)  # Adds all ORM table classes to the specified DB by emitting
+    # CREATE TABLE DDL

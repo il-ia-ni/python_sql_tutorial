@@ -22,5 +22,12 @@
       <jdbc-url>jdbc:jtds:sqlserver://GRYSQLA01:1433</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="fallback_db.sqlite" single-connection="true" uuid="c6fcce30-d224-4298-945c-ba4feb2ed4ed">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\niil02\Documents\git\tutorials\python_sql_tutorial\local_repos\fallback_db.sqlite</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
