@@ -11,7 +11,8 @@ from loguru import logger
 from data_analysis.dataframes import df_from_group
 from data_analysis.defect_event_root_cause import join_defect_event_root_cause_filter_behaviour_id, BehaviourPattern
 from db_engines.db_sources_data.sql_server_test_localhost import SQLServerTestDBs
-from db_engines.sql_server_engine import url_SQLServerTestDBMS
+from db_engines.sql_server_engine import url_SQLServerTestDBMS as sql_server_url
+from db_engines.sqlite_engine import url_hostname as sqlite_url
 from phillip.db_connection import create_session_from_url
 
 
@@ -112,8 +113,8 @@ def plot_multi_from_dict(data: dict, defect: str, dict_lim=None):
 if __name__ == "__main__":
     # More to dunder name variable __name__: https://www.pythontutorial.net/python-basics/python-__name__/
 
-    app_odbc_driver = "ODBC Driver 17 for SQL Server"
-    URL = url_SQLServerTestDBMS + SQLServerTestDBs.MASTER_DB.value
+    app_odbc_driver = ""
+    URL = sqlite_url
     session = create_session_from_url(url=URL, odbc_driver=app_odbc_driver)
 
     root_causes_strand_1_1_sliver = join_defect_event_root_cause_filter_behaviour_id(session=session,
